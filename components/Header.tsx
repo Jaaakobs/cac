@@ -1,44 +1,24 @@
-import NextLogo from "./NextLogo";
-import SupabaseLogo from "./SupabaseLogo";
+import Image from 'next/image';
+import cacHeader from '@/images/cac_header.svg';
 
-export default function Header() {
+const Header: React.FC = () => {
   return (
-    <div className="flex flex-col gap-16 items-center">
-      <div className="flex gap-8 justify-center items-center">
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <SupabaseLogo />
-        </a>
-        <span className="border-l rotate-45 h-6" />
-        <a href="https://nextjs.org/" target="_blank" rel="noreferrer">
-          <NextLogo />
-        </a>
+    <header className="py-12">
+      <div className="max-w-screen-lg mx-auto px-4 flex flex-col md:flex-row items-center justify-between">
+        <div className="md:w-1/2">
+          <h1 className="text-5xl font-bold text-black mb-4">
+            Germany's Creative Jobs Hub.
+          </h1>
+          <p className="text-lg text-gray-700">
+            Craving a game-changing role at a leading creative agency? We have curated the hottest job offers from industry titans and rising stars. Fresh face or agency veteran, your next career move starts here.
+          </p>
+        </div>
+        <div className="md:w-1/2 mt-8 md:mt-0">
+          <Image src={cacHeader} alt="Germany's Creative Jobs Hub" layout="responsive" />
+        </div>
       </div>
-      <h1 className="sr-only">Supabase and Next.js Starter Template</h1>
-      <p className="text-3xl lg:text-4xl !leading-tight mx-auto max-w-xl text-center">
-        The fastest way to build apps with{" "}
-        <a
-          href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Supabase
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://nextjs.org/"
-          target="_blank"
-          className="font-bold hover:underline"
-          rel="noreferrer"
-        >
-          Next.js
-        </a>
-      </p>
-      <div className="w-full p-[1px] bg-gradient-to-r from-transparent via-foreground/10 to-transparent my-8" />
-    </div>
+    </header>
   );
-}
+};
+
+export default Header;
