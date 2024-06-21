@@ -16,7 +16,7 @@ const MenuBar: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-white w-full max-w-screen-lg mx-auto">
+    <div className="flex items-center justify-between p-4 w-full max-w-screen-lg mx-auto">
       <Link href="/">
         <Image src={cacLogo} alt="CAC Logo" width={150} height={40} />
       </Link>

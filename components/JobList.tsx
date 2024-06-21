@@ -97,7 +97,7 @@ const JobListComponent: React.FC<JobListComponentProps> = ({
             ))}
           </div>
           {visibleJobsCount < jobs.length && (
-            <div className="self-center mt-4 mb-4">
+            <div className="flex justify-center items-center mt-4 mb-4">
               <Button onClick={loadMoreJobs} disabled={loadingMore}>
                 {loadingMore ? (
                   <>

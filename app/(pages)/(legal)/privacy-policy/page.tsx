@@ -8,7 +8,7 @@ const PrivacyPolicy: React.FC = () => {
   return (
     <div>
       <MenuBar />
-      <div className="p-6 max-w-screen-lg mx-auto">
+      <div className="bg-background p-6 max-w-screen-lg mx-auto">
         <Link href="/" className="text-blue-600 hover:underline flex items-center mb-4">
           <span className="mr-2">&larr;</span> Back to job board
         </Link>

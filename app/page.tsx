@@ -99,7 +99,7 @@ export default function Jobs() {
   };
 
   return (
-    <div className="p-6 max-w-screen-lg px-4 mx-auto">
+    <div className="bg-background p-6 max-w-screen-lg px-4 mx-auto">
       <MenuBar />
       <Header />
       <FilterComponent

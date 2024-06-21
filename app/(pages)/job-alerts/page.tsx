@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import MenuBar from '@/components/MenuBar';
+import Footer from '@/components/Footer';
 
 declare global {
   interface Window {
@@ -30,7 +31,7 @@ const JobAlerts = () => {
           Let the right opportunities come to you! Just share what you're looking for to receive your weekly custom offers selection straight into your inbox.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="md:col-span-1 p-6 bg-white rounded-lg">
+          <div className="md:col-span-1 p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-4">How does it work?</h2>
             <ul className="list-disc list-inside space-y-2 text-gray-700">
               <li>We’ll set up a secure profile with all your preferences.</li>
@@ -39,7 +40,7 @@ const JobAlerts = () => {
             </ul>
           </div>
           <div className="md:col-span-2">
-            <div className="bg-white p-6 rounded-lg">
+            <div className="p-6 rounded-lg">
               <iframe
                 data-tally-src="https://tally.so/embed/mV5qZM?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
                 loading="lazy"
@@ -49,9 +50,11 @@ const JobAlerts = () => {
                 className="w-full"
               ></iframe>
             </div>
+            
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };
