@@ -75,7 +75,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
   const singleJobCategories = jobCategories.filter(category => !category.includes(','));
 
   return (
-    <div className="p-4 border border-gray-300 rounded-lg bg-white mb-6 space-y-4 w-full max-w-[1088px] mx-auto">
+    <div className="p-4 border border-gray-300 rounded-lg bg-white mb-6 space-y-4 w-full max-w-[1088px] mx-auto"> 
       <div className="flex flex-col md:flex-row items-center gap-4 w-full">
         <div className="relative flex-1 w-full">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -189,7 +189,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             return (
               <div key={key} className="flex items-center border border-gray-300 rounded px-2 py-1 text-sm">
                 <span>
-                  {typeof value === 'string' ? value : value.map(v => v.label).join(', ')}
+                  {typeof value === 'string' ? value : value.map((v: { label: string }) => v.label).join(', ')}
                 </span>
                 <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={() => clearFilter(key)}>
                   &times;
@@ -273,31 +273,32 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                   return (
                     <div key={key} className="flex items-center border border-gray-300 rounded px-2 py-1 text-sm">
                       <span>
-                        {typeof value === 'string' ? value : value.map(v => v.label).join(', ')}
+                        {typeof value === 'string' ? value : value.map((v: { label: string }) => v.label).join(', ')}
                       </span>
                       <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={() => clearFilter(key)}>
-                        &times;
-                      </button>
-                    </div>
-                  );
-                }
-                return null;
-              })}
-              {Object.values(filter).some((value) => value && (Array.isArray(value) ? value.length : value)) && (
-                <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={handleClearAll}>
-                  Clear all
-                </button>
-              )}
-            </div>
+                      &times;
+                    </button>
+                  </div>
+                );
+              }
+              return null;
+            })}
+            {Object.values(filter).some((value) => value && (Array.isArray(value) ? value.length : value)) && (
+              <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={handleClearAll}>
+                Clear all
+              </button>
+            )}
           </div>
-          <DrawerFooter>
-            <DrawerClose asChild>
-              <Button className="w-full mt-4">Apply Filters</Button>
-            </DrawerClose>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    </div>
-  );
-  }
-  export default FilterComponent;
+        </div>
+        <DrawerFooter>
+          <DrawerClose asChild>
+            <Button className="w-full mt-4">Apply Filters</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  </div>
+);
+};
+
+export default FilterComponent;

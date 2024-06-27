@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import MenuBar from '@/components/MenuBar';
 import Footer from '@/components/Footer';
+import Header from '@/components/HeaderAlert';
+import NavigationTabs from '@/components/NavigationTabs';
 
 declare global {
   interface Window {
@@ -23,13 +24,11 @@ const JobAlerts = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
-      <MenuBar />
+    <div className="bg-background p-6 max-w-screen-lg px-4 mx-auto">
+      <Header />
+      <NavigationTabs />
+      <div className="pt-4"></div>
       <main className="max-w-screen-lg mx-auto p-4">
-        <h1 className="text-4xl md:text-5xl font-bold text-black text-center mb-4">Get Tailored Job Alerts</h1>
-        <p className="text-base md:text-lg text-center text-gray-700 mb-8">
-          Let the right opportunities come to you! Just share what you're looking for to receive your weekly custom offers selection straight into your inbox.
-        </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-1 p-6 rounded-lg">
             <h2 className="text-xl font-bold mb-4">How does it work?</h2>
