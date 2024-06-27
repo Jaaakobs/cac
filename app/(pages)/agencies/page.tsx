@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import supabase from '@/utils/supabase/client';
 import CompanyCard from '@/components/CompanyCard';
-import Header from '@/components/Header';
+import Header from '@/components/HeaderAgencies';
 import Footer from '@/components/Footer';
 import NavigationTabs from '@/components/NavigationTabs';
 import CompanyFilterComponent from '@/components/CompanyFilter';
