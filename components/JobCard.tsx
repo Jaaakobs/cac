@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 type JobProps = {
   job: {
-    id: number; // Ensure the job has an id property
+    id: number;
     title: string;
     company_logo: string;
     agency_name: string;
@@ -13,7 +13,7 @@ type JobProps = {
     employment_type: string;
     seniority_level: string;
     posted_at: string;
-    job_function: string | null; // Allow job_function to be null
+    job_function: string; 
   };
 };
 
