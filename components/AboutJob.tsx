@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { MapPin, Briefcase, BarChart, Folder, Share2 } from "lucide-react";
+import { MapPin, Briefcase, BarChart, Folder, Share2, ChevronRight } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ type JobProps = {
     title: string;
     company_logo: string;
     agency_name: string;
-    company_id: number;
+    agency_id: number;
     location: string;
     employment_type: string;
     seniority_level: string;
@@ -20,12 +20,14 @@ type JobProps = {
     applicants_count: number;
     job_function: string;
     updated_at: string;
+    status: string;
+    isNew: boolean;
   };
 };
 
 const AboutJob = ({ job }: JobProps) => {
   const { toast } = useToast();
-  const [isNew, setIsNew] = useState(false);
+  const [isNew, setIsNew] = useState(job.isNew);
 
   useEffect(() => {
     const postedDate = new Date(job.posted_at);
@@ -44,7 +46,7 @@ const AboutJob = ({ job }: JobProps) => {
   };
 
   return (
-    <div className="p-8 bg-white rounded-lg shadow-md mb-6">
+    <div className="mb-6">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
           <img
@@ -57,14 +59,14 @@ const AboutJob = ({ job }: JobProps) => {
               <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md">New</span>
             )}
             <h1 className="text-2xl font-bold">{job.title}</h1>
-            <Link href={`/agencies/${job.company_id}`} passHref>
-              <p className="text-gray-700 hover:underline cursor-pointer">
+            <Link href={`/agencies/${job.agency_id}`} legacyBehavior>
+              <a className="text-gray-700 hover:underline cursor-pointer hidden md:block">
                 {job.agency_name}
-              </p>
+              </a>
             </Link>
           </div>
         </div>
-        <Button onClick={handleShare} variant="secondary" className="ml-auto">
+        <Button onClick={handleShare} variant="secondary" className="ml-auto hidden md:flex">
           <Share2 className="mr-2 h-4 w-4" />
           Share
         </Button>
@@ -95,16 +97,18 @@ const AboutJob = ({ job }: JobProps) => {
           </div>
         )}
       </div>
-      <div className="flex space-x-4">
-        <Button asChild>
-          <a href={job.apply_url} target="_blank" rel="noopener noreferrer">
+      <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
+        <Button asChild className="w-full md:w-auto">
+          <a href={job.apply_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full">
             Apply Now
+            <ChevronRight className="ml-2 h-4 w-4" />
           </a>
         </Button>
         {job.quick_apply_url && (
-          <Button asChild>
-            <a href={job.quick_apply_url} target="_blank" rel="noopener noreferrer">
+          <Button asChild className="w-full md:w-auto">
+            <a href={job.quick_apply_url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full">
               Quick Apply
+              <ChevronRight className="ml-2 h-4 w-4" />
             </a>
           </Button>
         )}

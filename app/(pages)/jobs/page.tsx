@@ -31,6 +31,7 @@ export default function Jobs() {
   useEffect(() => {
     if (!loading) {
       const filtered = jobs.filter(job => {
+        if (job.status !== 'active') return false; // Only show active jobs
         const matchesKeyword =
           filter.keyword === '' ||
           job.title.toLowerCase().includes(filter.keyword.toLowerCase()) ||

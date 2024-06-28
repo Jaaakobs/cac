@@ -44,10 +44,11 @@ export default function Companies() {
         return;
       }
 
-      // Fetch all jobs
+      // Fetch all active jobs
       const { data: jobs, error: jobsError } = await supabase
         .from('jobs')
-        .select('agency_id');
+        .select('agency_id')
+        .eq('status', 'active');
 
       if (jobsError) {
         console.error("Error fetching jobs:", jobsError);
@@ -55,7 +56,7 @@ export default function Companies() {
         return;
       }
 
-      // Count jobs per agency
+      // Count active jobs per agency
       const jobCountMap: { [key: number]: number } = {};
       jobs.forEach((job: any) => {
         if (job.agency_id) {
@@ -128,62 +129,62 @@ export default function Companies() {
 
   return (
     <div className="p-6 max-w-screen-lg px-4 mx-auto">
-  <Header />
-  <NavigationTabs />
-  <div className="pt-4"></div>
-  <CompanyFilterComponent
-    filter={filter}
-    setFilter={setFilter}
-    industries={industries}
-    sizes={sizes}
-    clearFilter={clearFilter}
-    clearAllFilters={clearAllFilters}
-  />
-  {loading ? (
-    <div>Loading companies...</div>
-  ) : (
-    <div>
-      {filteredCompanies.length > 0 && (
-        <div className="flex items-center justify-between mt-4 text-sm w-full mb-4">
-          <div>
-            Currently hiring <span className="font-bold">{filteredCompanies.filter(company => company.job_count > 0).length}</span> agenc{filteredCompanies.filter(company => company.job_count > 0).length !== 1 ? 'ies' : 'y'}
+      <Header />
+      <NavigationTabs />
+      <div className="pt-4"></div>
+      <CompanyFilterComponent
+        filter={filter}
+        setFilter={setFilter}
+        industries={industries}
+        sizes={sizes}
+        clearFilter={clearFilter}
+        clearAllFilters={clearAllFilters}
+      />
+      {loading ? (
+        <div>Loading companies...</div>
+      ) : (
+        <div>
+          {filteredCompanies.length > 0 && (
+            <div className="flex items-center justify-between mt-4 text-sm w-full mb-4">
+              <div>
+                Currently hiring <span className="font-bold">{filteredCompanies.filter(company => company.job_count > 0).length}</span> agenc{filteredCompanies.filter(company => company.job_count > 0).length !== 1 ? 'ies' : 'y'}
+              </div>
+            </div>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCompanies.filter(company => company.job_count > 0).slice(0, visibleCompaniesCount).map((company) => (
+              <CompanyCard key={company.id} company={company} />
+            ))}
           </div>
-        </div>
-      )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCompanies.filter(company => company.job_count > 0).slice(0, visibleCompaniesCount).map((company) => (
-          <CompanyCard key={company.id} company={company} />
-        ))}
-      </div>
-      {filteredCompanies.length > 0 && (
-        <div className="flex items-center justify-between mt-4 text-sm w-full mb-4">
-          <div>
-            Not hiring <span className="font-bold">{filteredCompanies.filter(company => company.job_count === 0).length}</span> agenc{filteredCompanies.filter(company => company.job_count === 0).length !== 1 ? 'ies' : 'y'}
+          {filteredCompanies.length > 0 && (
+            <div className="flex items-center justify-between mt-4 text-sm w-full mb-4">
+              <div>
+                Not hiring <span className="font-bold">{filteredCompanies.filter(company => company.job_count === 0).length}</span> agenc{filteredCompanies.filter(company => company.job_count === 0).length !== 1 ? 'ies' : 'y'}
+              </div>
+            </div>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCompanies.filter(company => company.job_count === 0).slice(0, visibleCompaniesCount).map((company) => (
+              <CompanyCard key={company.id} company={company} />
+            ))}
           </div>
+          {visibleCompaniesCount < filteredCompanies.length && (
+            <div className="flex justify-center mt-6">
+              <Button onClick={loadMoreCompanies} disabled={loadingMore}>
+                {loadingMore ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  'Load More'
+                )}
+              </Button>
+            </div>
+          )}
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCompanies.filter(company => company.job_count === 0).slice(0, visibleCompaniesCount).map((company) => (
-          <CompanyCard key={company.id} company={company} />
-        ))}
-      </div>
-      {visibleCompaniesCount < filteredCompanies.length && (
-        <div className="flex justify-center mt-6">
-          <Button onClick={loadMoreCompanies} disabled={loadingMore}>
-            {loadingMore ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </>
-            ) : (
-              'Load More'
-            )}
-          </Button>
-        </div>
-      )}
+      <Footer />
     </div>
-  )}
-  <Footer />
-</div>
   );
 }

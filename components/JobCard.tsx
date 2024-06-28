@@ -1,6 +1,7 @@
 import { MapPin, Briefcase, BarChart, Folder, ChevronRight, Calendar } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
 
 type JobProps = {
   job: {
@@ -38,6 +39,14 @@ const getPostedAtText = (postedAt: string) => {
   }
 };
 
+const isNewJob = (postedAt: string) => {
+  const postedDate = new Date(postedAt);
+  const currentDate = new Date();
+  const diffTime = Math.abs(currentDate.getTime() - postedDate.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays <= 14;
+};
+
 const JobCard = ({ job }: JobProps) => {
   const firstLocationWord = job.location ? job.location.split(",")[0] : "";
   const [isMobile, setIsMobile] = useState(false);
@@ -64,7 +73,14 @@ const JobCard = ({ job }: JobProps) => {
                 alt={job.agency_name}
                 className="w-16 h-16 rounded-full"
               />
-              <h3 className="text-lg font-bold w-full text-left ml-4">{job.title}</h3>
+              <div className="flex flex-col w-full ml-4">
+                <div className="flex items-center">
+                  <h3 className="text-lg font-bold">{job.title}</h3>
+                  {isNewJob(job.posted_at) && (
+                    <Badge className="ml-2">New</Badge>
+                  )}
+                </div>
+              </div>
             </div>
             <div className="flex flex-col text-left">
               <div className="flex flex-wrap items-center text-gray-700 mb-2">
@@ -112,7 +128,12 @@ const JobCard = ({ job }: JobProps) => {
               />
             </div>
             <div className="flex-grow">
-              <h3 className="text-xl font-bold w-full">{job.title}</h3>
+              <div className="flex items-center">
+                <h3 className="text-xl font-bold">{job.title}</h3>
+                {isNewJob(job.posted_at) && (
+                  <Badge className="ml-2">New</Badge>
+                )}
+              </div>
               <div className="flex flex-wrap items-center text-gray-700 mt-2">
                 <Link href={`/agencies/${job.agency_id}`} passHref>
                   <span className="hover:underline cursor-pointer mr-4">

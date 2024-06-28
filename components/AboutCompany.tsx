@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { MapPin, Globe, Linkedin } from "lucide-react";
+import { MapPin, Globe, Linkedin, Briefcase, Folder } from "lucide-react";
 import Link from 'next/link';
+import { Button } from './ui/button';
 
 type CompanyProps = {
   company: {
@@ -36,41 +36,36 @@ const AboutCompany = ({ company }: CompanyProps) => {
         />
         <div>
           <h1 className="text-2xl font-bold">{company.agency_name}</h1>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge className="bg-gray-200 text-gray-700">
-              <MapPin className="mr-1 h-4 w-4 inline" />
-              {company.headquarters}
-            </Badge>
-            <Badge className="bg-gray-200 text-gray-700">
-              {company.industry}
-            </Badge>
-            <Badge className="bg-gray-200 text-gray-700">
+          <div className="flex flex-wrap items-center gap-2 mt-1 text-gray-500">
+            <div className="flex items-center">
+              <Briefcase className="mr-1 h-4 w-4" />
               {company.company_size}
-            </Badge>
-            <Badge className="bg-gray-200 text-gray-700">
-              Founded in {company.founded}
-            </Badge>
+            </div>
+            <div className="flex items-center">
+              <Folder className="mr-1 h-4 w-4" />
+              {company.industry}
+            </div>
           </div>
           <p className="text-gray-600 mt-2">{company.tagline}</p>
-          <div className="flex space-x-4 mt-4">
-            {company.linkedin_url && (
-              <Button asChild>
-                <Link href={company.linkedin_url} target="_blank" rel="noopener noreferrer">
-                  <Linkedin className="mr-2 h-4 w-4" />
-                  LinkedIn
-                </Link>
-              </Button>
-            )}
-            {company.website && (
-              <Button asChild>
-                <Link href={company.website} target="_blank" rel="noopener noreferrer">
-                  <Globe className="mr-2 h-4 w-4" />
-                  Website
-                </Link>
-              </Button>
-            )}
-          </div>
         </div>
+      </div>
+      <div className="flex space-x-4 mb-4">
+        {company.website && (
+          <Badge className="flex items-center bg-gray-100 text-gray-700 px-3 py-1">
+            <Globe className="mr-2 h-4 w-4" />
+            <Link href={company.website} target="_blank" rel="noopener noreferrer">
+              Website
+            </Link>
+          </Badge>
+        )}
+        {company.linkedin_url && (
+          <Badge className="flex items-center bg-gray-100 text-gray-700 px-3 py-1">
+            <Linkedin className="mr-2 h-4 w-4" />
+            <Link href={company.linkedin_url} target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </Link>
+          </Badge>
+        )}
       </div>
       <div>
         <p className="text-gray-700">

@@ -9,6 +9,7 @@ import AboutJob from '@/components/AboutJob';
 import BackLink from '@/components/BackLink';
 import AboutCompany from '@/components/AboutCompany';
 import JobDescription from '@/components/JobDescription';
+import { Badge } from '@/components/ui/badge';
 
 type JobPageProps = {
   params: {
@@ -43,7 +44,8 @@ const fetchJobAndCompany = async (jobId: string) => {
     .from('jobs')
     .select('*')
     .eq('agency_id', job.agency_id)
-    .neq('id', jobId);
+    .neq('id', jobId)
+    .eq('status', 'active');  // Only fetch active jobs
 
   if (otherJobsError) {
     console.error('Error fetching other jobs:', otherJobsError);
@@ -83,12 +85,22 @@ const JobPage: React.FC<JobPageProps> = ({ params }) => {
   return (
     <div className="p-6 max-w-screen-lg px-4 mx-auto">
       <BackLink />
+      <div className="mb-4">
+        {job.status !== 'active' && (
+          <Badge variant="destructive" className="mb-2">This job post is no longer active</Badge>
+        )}
+        {job.isNew && (
+          <Badge className="mb-2">New</Badge>
+        )}
+      </div>
       <AboutJob job={job} />
       <JobDescription job={job} />
       <AboutCompany company={company} />
       {otherJobs.length > 0 && (
         <div className="border-t border-gray-300 mt-6 pt-6">
-          <h2 className="text-xl font-semibold mb-4">Other open jobs from {company.agency_name}</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Other open jobs from {company.agency_name} ({otherJobs.length})
+          </h2>
           <div className="grid grid-cols-1 gap-4">
             {otherJobs.map((job) => (
               <JobCard key={job.id} job={job} />

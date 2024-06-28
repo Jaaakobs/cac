@@ -14,7 +14,7 @@ type JobDescriptionProps = {
     });
   
     return (
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+      <div className="bg-background mb-6">
         <h3 className="text-lg font-medium mb-2">Job Description</h3>
         <div
           className="text-gray-700"
