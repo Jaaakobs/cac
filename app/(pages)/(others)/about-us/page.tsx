@@ -4,16 +4,7 @@ import Link from 'next/link';
 import MenuBar from '@/components/MenuBar';
 import Footer from '@/components/Footer';
 import { Button } from "@/components/ui/button";
-
-export function ButtonLink() {
-  return (
-    <Link href="/" passHref>
-      <Button variant="link">
-        &larr; Back to job board
-      </Button>
-    </Link>
-  );
-}
+import BackLink from '@/components/BackLink';
 
 const AboutUs: React.FC = () => {
   const sections = [
@@ -44,7 +35,7 @@ const AboutUs: React.FC = () => {
       <MenuBar />
       <div className="bg-background p-6 max-w-screen-lg mx-auto">
         <div className="flex items-center mb-4">
-          <ButtonLink />
+          <BackLink />
         </div>
         <div className="grid gap-6">
           {sections.map((section, index) => (
