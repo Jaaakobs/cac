@@ -66,7 +66,7 @@ const AboutJob = ({ job }: JobProps) => {
             </Link>
           </div>
         </div>
-        <Button onClick={handleShare} variant="secondary" className="ml-auto hidden md:flex">
+        <Button onClick={handleShare} className="ml-auto hidden md:flex">
           <Share2 className="mr-2 h-4 w-4" />
           Share
         </Button>

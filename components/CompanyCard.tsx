@@ -35,7 +35,7 @@ export default function CompanyCard({ company }: CompanyCardProps) {
             {truncateDescription(company.company_description_short, 150)}
           </div>
           <div className="flex flex-wrap gap-2 mt-2 text-gray-500">
-            <Badge variant="outline">
+            <Badge variant="secondary">
               {company.job_count} {company.job_count === 1 ? 'job' : 'jobs'}
             </Badge>
           </div>

@@ -17,7 +17,8 @@ const NavigationTabs = () => {
       try {
         const { count: jobs, error: jobsError } = await supabase
           .from('jobs')
-          .select('*', { count: 'exact', head: true });
+          .select('*', { count: 'exact', head: true })
+          .eq('status', 'active');
 
         if (jobsError) {
           console.error('Error fetching jobs count:', jobsError);
