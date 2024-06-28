@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { Search } from 'lucide-react';
+import { Search, Filter } from 'lucide-react'; // Update import to include Filter
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -11,6 +11,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import JobAlertButton from '@/components/JobAlertButton'; // Import JobAlertButton
 
 type Filter = {
   keyword: string;
@@ -76,7 +77,10 @@ const CompanyFilterComponent: React.FC<CompanyFilterComponentProps> = ({
             className="border border-gray-300 p-3 pl-10 w-full rounded-lg bg-white h-12"
           />
         </div>
-        <Button className="md:hidden w-full" onClick={() => setDrawerOpen(true)}>All filters</Button>
+        <Button variant="secondary" className="md:hidden w-full" onClick={() => setDrawerOpen(true)}>
+          <Filter className="mr-2 h-4 w-4" />
+          All filters
+        </Button>
       </div>
       <div className="hidden md:grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 items-center w-full">
         <div className="col-span-1">
@@ -86,6 +90,7 @@ const CompanyFilterComponent: React.FC<CompanyFilterComponentProps> = ({
             value={industries.find(industry => industry.value === filter.industry) || null}
             onChange={(value) => handleSelectChange('industry', value)}
             placeholder="Industry"
+            isSearchable={false} // Disable search input
             className="rounded-lg text-sm"
             classNamePrefix="react-select"
           />
@@ -97,6 +102,7 @@ const CompanyFilterComponent: React.FC<CompanyFilterComponentProps> = ({
             value={sizes.find(size => size.value === filter.size) || null}
             onChange={(value) => handleSelectChange('size', value)}
             placeholder="Size"
+            isSearchable={false} // Disable search input
             className="rounded-lg text-sm"
             classNamePrefix="react-select"
           />
@@ -137,6 +143,7 @@ const CompanyFilterComponent: React.FC<CompanyFilterComponentProps> = ({
               value={industries.find(industry => industry.value === filter.industry) || null}
               onChange={(value) => handleSelectChange('industry', value)}
               placeholder="Industry"
+              isSearchable={false} // Disable search input
               className="rounded-lg text-sm"
               classNamePrefix="react-select"
             />
@@ -146,6 +153,7 @@ const CompanyFilterComponent: React.FC<CompanyFilterComponentProps> = ({
               value={sizes.find(size => size.value === filter.size) || null}
               onChange={(value) => handleSelectChange('size', value)}
               placeholder="Size"
+              isSearchable={false} // Disable search input
               className="rounded-lg text-sm"
               classNamePrefix="react-select"
             />
@@ -157,6 +165,7 @@ const CompanyFilterComponent: React.FC<CompanyFilterComponentProps> = ({
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
+      <JobAlertButton />
     </div>
   );
 };

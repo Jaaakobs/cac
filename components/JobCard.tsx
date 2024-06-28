@@ -13,7 +13,7 @@ type JobProps = {
     employment_type: string;
     seniority_level: string;
     posted_at: string;
-    job_function: string; 
+    job_function: string;
   };
 };
 
@@ -55,60 +55,108 @@ const JobCard = ({ job }: JobProps) => {
 
   return (
     <Link href={`/jobs/${job.id}`} passHref>
-      <div className="p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 relative flex items-center h-full w-full">
-        <div className="flex-shrink-0">
-          <img
-            src={job.company_logo}
-            alt={job.agency_name}
-            className="w-16 h-16 rounded-full mr-4"
-          />
-        </div>
-        <div className="flex-grow">
-          <h3 className="text-xl font-bold w-full">{job.title}</h3>
-          <div className="flex flex-wrap items-center text-gray-700 mt-2">
-            <Link href={`/agencies/${job.agency_id}`} passHref>
-              <span className="hover:underline cursor-pointer mr-4">
-                {job.agency_name}
-              </span>
-            </Link>
-            {firstLocationWord && (
-              <div className="flex items-center mr-4">
-                <MapPin className="mr-1 h-4 w-4 inline" />
-                {firstLocationWord}
+      <div className={`p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 relative ${isMobile ? 'flex flex-col' : 'flex items-center'} h-full w-full`}>
+        {isMobile ? (
+          <>
+            <div className="flex justify-between items-center mb-4">
+              <img
+                src={job.company_logo}
+                alt={job.agency_name}
+                className="w-16 h-16 rounded-full"
+              />
+              <h3 className="text-lg font-bold w-full text-left ml-4">{job.title}</h3>
+            </div>
+            <div className="flex flex-col text-left">
+              <div className="flex flex-wrap items-center text-gray-700 mb-2">
+                <Link href={`/agencies/${job.agency_id}`} passHref>
+                  <span className="hover:underline cursor-pointer mr-4">
+                    {job.agency_name}
+                  </span>
+                </Link>
+                {firstLocationWord && (
+                  <div className="flex items-center mr-4">
+                    <MapPin className="mr-1 h-4 w-4 inline" />
+                    {firstLocationWord}
+                  </div>
+                )}
+                {postedAtText && (
+                  <div className="flex items-center">
+                    <Calendar className="mr-1 h-4 w-4 inline" />
+                    {postedAtText}
+                  </div>
+                )}
               </div>
-            )}
-            {postedAtText && (
-              <div className="flex items-center">
-                <Calendar className="mr-1 h-4 w-4 inline" />
-                {postedAtText}
+              <div className="flex flex-wrap items-center gap-4">
+                {job.employment_type && (
+                  <div className="flex items-center text-gray-700">
+                    <Briefcase className="mr-1 h-4 w-4 inline" />
+                    {job.employment_type}
+                  </div>
+                )}
+                {job.seniority_level && (
+                  <div className="flex items-center text-gray-700">
+                    <BarChart className="mr-1 h-4 w-4 inline" />
+                    {job.seniority_level}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-          <div className="flex flex-wrap items-center gap-4 mt-2">
-            {job.employment_type && (
-              <div className="flex items-center text-gray-700">
-                <Briefcase className="mr-1 h-4 w-4 inline" />
-                {job.employment_type}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex-shrink-0">
+              <img
+                src={job.company_logo}
+                alt={job.agency_name}
+                className="w-16 h-16 rounded-full mr-4"
+              />
+            </div>
+            <div className="flex-grow">
+              <h3 className="text-xl font-bold w-full">{job.title}</h3>
+              <div className="flex flex-wrap items-center text-gray-700 mt-2">
+                <Link href={`/agencies/${job.agency_id}`} passHref>
+                  <span className="hover:underline cursor-pointer mr-4">
+                    {job.agency_name}
+                  </span>
+                </Link>
+                {firstLocationWord && (
+                  <div className="flex items-center mr-4">
+                    <MapPin className="mr-1 h-4 w-4 inline" />
+                    {firstLocationWord}
+                  </div>
+                )}
+                {postedAtText && (
+                  <div className="flex items-center">
+                    <Calendar className="mr-1 h-4 w-4 inline" />
+                    {postedAtText}
+                  </div>
+                )}
               </div>
-            )}
-            {job.seniority_level && (
-              <div className="flex items-center text-gray-700">
-                <BarChart className="mr-1 h-4 w-4 inline" />
-                {job.seniority_level}
+              <div className="flex flex-wrap items-center gap-4 mt-2">
+                {job.employment_type && (
+                  <div className="flex items-center text-gray-700">
+                    <Briefcase className="mr-1 h-4 w-4 inline" />
+                    {job.employment_type}
+                  </div>
+                )}
+                {job.seniority_level && (
+                  <div className="flex items-center text-gray-700">
+                    <BarChart className="mr-1 h-4 w-4 inline" />
+                    {job.seniority_level}
+                  </div>
+                )}
+                {job.job_function && (
+                  <div className="flex items-center text-gray-700">
+                    <Folder className="mr-1 h-4 w-4 inline" />
+                    {job.job_function}
+                  </div>
+                )}
               </div>
-            )}
-            {job.job_function && (
-              <div className="flex items-center text-gray-700">
-                <Folder className="mr-1 h-4 w-4 inline" />
-                {job.job_function}
-              </div>
-            )}
-          </div>
-        </div>
-        {!isMobile && (
-          <div className="ml-auto pl-4">
-            <ChevronRight className="h-6 w-6 text-gray-600" />
-          </div>
+            </div>
+            <div className="ml-auto pl-4">
+              <ChevronRight className="h-6 w-6 text-gray-600" />
+            </div>
+          </>
         )}
       </div>
     </Link>

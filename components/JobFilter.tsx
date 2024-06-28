@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
-import { MapPin, Search } from 'lucide-react';
+import { MapPin, Search, Filter } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -12,6 +12,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import JobAlertButton from '@/components/JobAlertButton';
 
 type FilterComponentProps = {
   filter: {
@@ -73,6 +74,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
 
   // Filter out categories that contain a comma
   const singleJobCategories = jobCategories.filter(category => !category.includes(','));
+  const uniqueAgencyNames = Array.from(new Set(agencyNames)).map(name => ({ value: name, label: name }));
 
   return (
     <div className="p-4 border border-gray-300 rounded-lg bg-white mb-6 space-y-4 w-full max-w-[1088px] mx-auto"> 
@@ -93,6 +95,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         <div className="relative flex-1 w-full">
           <Select
             isMulti
+            isSearchable={false} // Disable search input
             name="location"
             options={locations}
             value={filter.location}
@@ -114,7 +117,10 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             }}
           />
         </div>
-        <Button className="md:hidden w-full" onClick={() => setDrawerOpen(true)}>All filters</Button>
+        <Button variant="outline" className="md:hidden w-full" onClick={() => setDrawerOpen(true)}>
+          <Filter className="mr-2 h-4 w-4" />
+          All filters
+        </Button>
       </div>
       <div className="hidden md:grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-6 items-center w-full">
         <div className="col-span-1">
@@ -124,6 +130,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             value={null}
             onChange={(value) => handleSelectChange('jobCategory', value ? value.value : '')}
             placeholder="Job function"
+            isSearchable={false} // Disable search input
             className="rounded-lg text-sm"
             classNamePrefix="react-select"
           />
@@ -135,6 +142,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             value={null}
             onChange={(value) => handleSelectChange('agencyIndustry', value ? value.value : '')}
             placeholder="Industry"
+            isSearchable={false} // Disable search input
             className="rounded-lg text-sm"
             classNamePrefix="react-select"
           />
@@ -142,10 +150,11 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
         <div className="col-span-1">
           <Select
             name="agencyName"
-            options={agencyNames.map(name => ({ value: name, label: name }))}
+            options={uniqueAgencyNames}
             value={null}
             onChange={(value) => handleSelectChange('agencyName', value ? value.value : '')}
             placeholder="Company"
+            isSearchable={false} // Disable search input
             className="rounded-lg text-sm"
             classNamePrefix="react-select"
           />
@@ -157,6 +166,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             value={null}
             onChange={(value) => handleSelectChange('seniorityLevel', value ? value.value : '')}
             placeholder="Seniority"
+            isSearchable={false} // Disable search input
             className="rounded-lg text-sm"
             classNamePrefix="react-select"
           />
@@ -168,6 +178,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             value={null}
             onChange={(value) => handleSelectChange('employmentType', value ? value.value : '')}
             placeholder="Employment"
+            isSearchable={false} // Disable search input
             className="rounded-lg text-sm"
             classNamePrefix="react-select"
           />
@@ -189,7 +200,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
             return (
               <div key={key} className="flex items-center border border-gray-300 rounded px-2 py-1 text-sm">
                 <span>
-                  {typeof value === 'string' ? value : value.map((v: { label: string }) => v.label).join(', ')}
+                  {typeof value === 'string' ? value : Array.isArray(value) ? value.map((v: { label: string }) => v.label).join(', ') : ''}
                 </span>
                 <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={() => clearFilter(key)}>
                   &times;
@@ -219,6 +230,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
               value={null}
               onChange={(value) => handleSelectChange('jobCategory', value ? value.value : '')}
               placeholder="Job function"
+              isSearchable={false} // Disable search input
               className="rounded-lg text-sm"
               classNamePrefix="react-select"
             />
@@ -228,15 +240,17 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
               value={null}
               onChange={(value) => handleSelectChange('agencyIndustry', value ? value.value : '')}
               placeholder="Industry"
+              isSearchable={false} // Disable search input
               className="rounded-lg text-sm"
               classNamePrefix="react-select"
             />
             <Select
               name="agencyName"
-              options={agencyNames.map(name => ({ value: name, label: name }))}
+              options={uniqueAgencyNames}
               value={null}
               onChange={(value) => handleSelectChange('agencyName', value ? value.value : '')}
               placeholder="Company"
+              isSearchable={false} // Disable search input
               className="rounded-lg text-sm"
               classNamePrefix="react-select"
             />
@@ -246,6 +260,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
               value={null}
               onChange={(value) => handleSelectChange('seniorityLevel', value ? value.value : '')}
               placeholder="Seniority"
+              isSearchable={false} // Disable search input
               className="rounded-lg text-sm"
               classNamePrefix="react-select"
             />
@@ -255,6 +270,7 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
               value={null}
               onChange={(value) => handleSelectChange('employmentType', value ? value.value : '')}
               placeholder="Employment"
+              isSearchable={false} // Disable search input
               className="rounded-lg text-sm"
               classNamePrefix="react-select"
             />
@@ -273,32 +289,33 @@ const FilterComponent: React.FC<FilterComponentProps> = ({
                   return (
                     <div key={key} className="flex items-center border border-gray-300 rounded px-2 py-1 text-sm">
                       <span>
-                        {typeof value === 'string' ? value : value.map((v: { label: string }) => v.label).join(', ')}
+                        {typeof value === 'string' ? value : Array.isArray(value) ? value.map((v: { label: string }) => v.label).join(', ') : ''}
                       </span>
                       <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={() => clearFilter(key)}>
-                      &times;
-                    </button>
-                  </div>
-                );
-              }
-              return null;
-            })}
-            {Object.values(filter).some((value) => value && (Array.isArray(value) ? value.length : value)) && (
-              <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={handleClearAll}>
-                Clear all
-              </button>
-            )}
+                        &times;
+                      </button>
+                    </div>
+                  );
+                }
+                return null;
+              })}
+              {Object.values(filter).some((value) => value && (Array.isArray(value) ? value.length : value)) && (
+                <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={handleClearAll}>
+                  Clear all
+                </button>
+              )}
+            </div>
           </div>
-        </div>
-        <DrawerFooter>
-          <DrawerClose asChild>
-            <Button className="w-full mt-4">Apply Filters</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
-  </div>
-);
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button className="w-full mt-4">Apply Filters</Button>
+            </DrawerClose>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <JobAlertButton />
+    </div>
+  );
 };
 
 export default FilterComponent;
