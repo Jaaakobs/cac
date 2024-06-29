@@ -30,6 +30,7 @@
     "cmdk": "^1.0.0",
     "crawlee": "^3.10.5",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
     "embla-carousel-react": "^8.1.5",
     "geist": "^1.2.1",
     "loops": "^2.1.1",

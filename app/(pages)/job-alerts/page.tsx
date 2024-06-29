@@ -5,6 +5,8 @@ import Footer from '@/components/Footer';
 import Header from '@/components/HeaderAlert';
 import NavigationTabs from '@/components/NavigationTabs';
 import JobAlertForm from '@/components/JobAlertForm';
+import MenuBar from '@/components/MenuBar';
+import Banner from '@/components/Banner';
 
 const locations = [
   { value: 'Berlin', label: 'Berlin' },
@@ -66,7 +68,9 @@ const employmentTypes = [
 
 const JobAlerts = () => {
   return (
-    <div className="bg-background p-6">
+    <div className="p-6 max-w-screen-lg px-4 mx-auto">
+      <Banner />
+      <MenuBar />
       <Header />
       <NavigationTabs />
       <div className="pt-4"></div>

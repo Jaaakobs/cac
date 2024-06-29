@@ -10,6 +10,7 @@ import CompanyFilterComponent from '@/components/CompanyFilter';
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import Banner from '@/components/Banner';
+import MenuBar from '@/components/MenuBar';
 
 export type Company = {
   id: number;
@@ -131,6 +132,7 @@ export default function Companies() {
   return (
     <div className="p-6 max-w-screen-lg px-4 mx-auto">
       <Banner />
+      <MenuBar />
       <Header />
       <NavigationTabs />
       <div className="pt-4"></div>

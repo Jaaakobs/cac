@@ -117,6 +117,7 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
       });
     } else {
       // Call Loops API to create contact
+      console.log('Creating contact in Loops with values:', values);
       await createContact(values.email!, {
         firstName: values.name,
         source: 'Job Alert Form',
@@ -156,6 +157,7 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
       });
     } else {
       // Call Loops API to update contact
+      console.log('Updating contact in Loops with formData:', formData);
       await updateContact(formData.email!, {
         firstName: formData.name,
         source: 'Job Alert Form',
@@ -174,7 +176,7 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
 
     setShowAlert(false);
   };
-
+  
   return (
     <>
       <Form {...form}>

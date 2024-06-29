@@ -13,17 +13,6 @@ const Header: React.FC = () => {
           Let the right opportunities come to you! Just share what you're looking for to receive custom offers selection straight into your inbox.
           </p>
         </div>
-        <div className="w-full mt-2 md:mt-3 flex justify-center pb-4 md:pb-6">
-          <div className="relative w-full h-[50px] md:h-[100px]">
-            <Image 
-              src={cacLogo} 
-              alt="Germany's Creative Jobs Hub" 
-              layout="fill" 
-              objectFit="contain" 
-              className="w-full h-full" 
-            />
-          </div>
-        </div>
       </div>
     </header>
   );
