@@ -13,17 +13,6 @@ const Header: React.FC = () => {
             Craving a game-changing role at a leading creative agency? We have curated the hottest job offers from industry titans and rising stars.
           </p>
         </div>
-        <div className="w-full mt-2 md:mt-3 flex justify-center pb-4 md:pb-6">
-          <div className="relative w-full h-[50px] md:h-[100px]">
-            <Image 
-              src={cacLogo} 
-              alt="Germany's Creative Jobs Hub" 
-              layout="fill" 
-              objectFit="contain" 
-              className="w-full h-full" 
-            />
-          </div>
-        </div>
       </div>
     </header>
   );

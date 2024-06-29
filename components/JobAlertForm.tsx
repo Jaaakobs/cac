@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Select, { SingleValue, MultiValue } from 'react-select';
+import Select, { MultiValue } from 'react-select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -26,8 +26,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { createContact, updateContact } from '@/utils/loopsApi';
 
 const jobAlertSchema = z.object({
   name: z.string().optional(),
@@ -105,8 +105,8 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
         industry: values.industry?.map(ind => ind.value).join(', ') || '',
         seniority: values.seniority?.map(sen => sen.value).join(', ') || '',
         employment_type: values.employmentType?.map(emp => emp.value).join(', ') || '',
-        doi: false,  // Assuming default value for DOI
-        matching_job_ids: '',  // Assuming this is initially empty
+        doi: false,
+        matching_job_ids: '',
       }
     ]);
 
@@ -116,6 +116,17 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
         variant: "destructive",
       });
     } else {
+      // Call Loops API to create contact
+      await createContact(values.email!, {
+        firstName: values.name,
+        source: 'Job Alert Form',
+        location: values.location?.map(loc => loc.label).join(', ') || '',
+        jobFunction: values.jobFunction?.map(func => func.label).join(', ') || '',
+        industry: values.industry?.map(ind => ind.label).join(', ') || '',
+        seniority: values.seniority?.map(sen => sen.label).join(', ') || '',
+        employmentType: values.employmentType?.map(emp => emp.label).join(', ') || '',
+      });
+
       form.reset();
       toast({
         description: "Job alert successfully created.",
@@ -144,6 +155,17 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
         variant: "destructive",
       });
     } else {
+      // Call Loops API to update contact
+      await updateContact(formData.email!, {
+        firstName: formData.name,
+        source: 'Job Alert Form',
+        location: formData.location?.map(loc => loc.label).join(', ') || '',
+        jobFunction: formData.jobFunction?.map(func => func.label).join(', ') || '',
+        industry: formData.industry?.map(ind => ind.label).join(', ') || '',
+        seniority: formData.seniority?.map(sen => sen.label).join(', ') || '',
+        employmentType: formData.employmentType?.map(emp => emp.label).join(', ') || '',
+      });
+
       form.reset();
       toast({
         description: "Job alert successfully updated.",

@@ -11,6 +11,7 @@ import SubscriptionComponent from '@/components/SubscriptionComponent';
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import Banner from '@/components/Banner';
+import MenuBar from '@/components/MenuBar';
 
 export default function Jobs() {
   const { jobs, locations, jobCategories, agencyIndustries, agencyNames, loading } = useJobs();
@@ -106,6 +107,7 @@ export default function Jobs() {
   return (
     <div className="bg-background p-6 max-w-screen-lg px-4 mx-auto">
   <Banner />
+  <MenuBar />
   <Header />
   <NavigationTabs />
   <div className="pt-4 max-w-[1088px] mx-auto">
