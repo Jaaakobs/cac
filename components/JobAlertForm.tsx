@@ -115,8 +115,8 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
         variant: "destructive",
       });
     } else {
-      // Call Loops API to create contact
-      console.log('Creating contact in Loops with values:', values);
+      // Call API to create contact
+      console.log('Creating contact with values:', values);
       await fetch('/api/createContact', {
         method: 'POST',
         headers: {
@@ -164,8 +164,8 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
         variant: "destructive",
       });
     } else {
-      // Call Loops API to update contact
-      console.log('Updating contact in Loops with formData:', formData);
+      // Call API to update contact
+      console.log('Updating contact with formData:', formData);
       await fetch('/api/updateContact', {
         method: 'PUT',
         headers: {
