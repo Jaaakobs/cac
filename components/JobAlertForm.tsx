@@ -27,7 +27,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { createContact, updateContact } from '@/utils/loopsApi';
 
 const jobAlertSchema = z.object({
   name: z.string().optional(),
@@ -118,14 +117,23 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
     } else {
       // Call Loops API to create contact
       console.log('Creating contact in Loops with values:', values);
-      await createContact(values.email!, {
-        firstName: values.name,
-        source: 'Job Alert Form',
-        location: values.location?.map(loc => loc.label).join(', ') || '',
-        jobFunction: values.jobFunction?.map(func => func.label).join(', ') || '',
-        industry: values.industry?.map(ind => ind.label).join(', ') || '',
-        seniority: values.seniority?.map(sen => sen.label).join(', ') || '',
-        employmentType: values.employmentType?.map(emp => emp.label).join(', ') || '',
+      await fetch('/api/createContact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email,
+          properties: {
+            firstName: values.name,
+            source: 'Job Alert Form',
+            location: values.location?.map(loc => loc.label).join(', ') || '',
+            jobFunction: values.jobFunction?.map(func => func.label).join(', ') || '',
+            industry: values.industry?.map(ind => ind.label).join(', ') || '',
+            seniority: values.seniority?.map(sen => sen.label).join(', ') || '',
+            employmentType: values.employmentType?.map(emp => emp.label).join(', ') || '',
+          },
+        }),
       });
 
       form.reset();
@@ -158,14 +166,23 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
     } else {
       // Call Loops API to update contact
       console.log('Updating contact in Loops with formData:', formData);
-      await updateContact(formData.email!, {
-        firstName: formData.name,
-        source: 'Job Alert Form',
-        location: formData.location?.map(loc => loc.label).join(', ') || '',
-        jobFunction: formData.jobFunction?.map(func => func.label).join(', ') || '',
-        industry: formData.industry?.map(ind => ind.label).join(', ') || '',
-        seniority: formData.seniority?.map(sen => sen.label).join(', ') || '',
-        employmentType: formData.employmentType?.map(emp => emp.label).join(', ') || '',
+      await fetch('/api/updateContact', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          properties: {
+            firstName: formData.name,
+            source: 'Job Alert Form',
+            location: formData.location?.map(loc => loc.label).join(', ') || '',
+            jobFunction: formData.jobFunction?.map(func => func.label).join(', ') || '',
+            industry: formData.industry?.map(ind => ind.label).join(', ') || '',
+            seniority: formData.seniority?.map(sen => sen.label).join(', ') || '',
+            employmentType: formData.employmentType?.map(emp => emp.label).join(', ') || '',
+          },
+        }),
       });
 
       form.reset();
@@ -176,7 +193,7 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
 
     setShowAlert(false);
   };
-  
+
   return (
     <>
       <Form {...form}>
