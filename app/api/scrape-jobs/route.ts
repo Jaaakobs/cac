@@ -215,7 +215,7 @@ Even if you are unsure about the level, add at least one output never give back 
 
 Job Description:`;
 
-const categoryPromptTemplate = `Based on the job description, categorize the job into one or more of the following categories, but select a maximum of 3, ideally just 1: Biz Dev Jobs, Creative Jobs, Delivery Jobs, Design Jobs, Marketing Jobs, Operations Jobs, Strategy Jobs, Tech Jobs. Provide the job categories separated by commas. Don't provide anything else or that you cannot assign a job. Always give at least one output.
+const categoryPromptTemplate = `Based on the job description, categorize the job into one or more of the following categories, but select a maximum of 3, ideally just 1: Biz Dev Jobs, Creative Jobs, Delivery Jobs, Design Jobs, Marketing Jobs, Operations Jobs, Strategy Jobs, Tech Jobs. Provide the job categories separated by commas. Don't provide anything else or that you cannot assign a job. If you don't have any assignment then leave this field blank. Never add anything else.
 
 Job Description:`;
 
