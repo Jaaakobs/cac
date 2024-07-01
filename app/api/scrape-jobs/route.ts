@@ -17,12 +17,12 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const generateOpenAIResponse = async (description: string, promptTemplate: string) => {
+const generateOpenAIResponse = async (title:string, description: string, promptTemplate: string) => {
   const response = await openai.chat.completions.create({
-    model: 'gpt-4',
+    model: 'gpt-4o',
     messages: [
       { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: `${promptTemplate}\n${description}` },
+      { role: 'user', content: `${promptTemplate}\n${title}\n${description}` },
     ],
   });
 
@@ -123,11 +123,11 @@ export async function POST() {
         }
 
         // Generate OpenAI responses for each job description
-        const languageScores = await generateOpenAIResponse(item.descriptionText, languagePromptTemplate);
+        const languageScores = await generateOpenAIResponse(item.title ,item.descriptionText, languagePromptTemplate);
         const { german_score, english_score } = extractLanguageScores(languageScores);
 
-        const jobCategory = await generateOpenAIResponse(item.descriptionText, categoryPromptTemplate);
-        const jobScore = await generateOpenAIResponse(item.descriptionText, scorePromptTemplate);
+        const jobCategory = await generateOpenAIResponse(item.title, item.descriptionText, categoryPromptTemplate);
+        const jobScore = await generateOpenAIResponse(item.title, item.descriptionText, scorePromptTemplate);
 
         const jobData = {
           id: item.id,
@@ -215,7 +215,7 @@ Even if you are unsure about the level, add at least one output never give back 
 
 Job Description:`;
 
-const categoryPromptTemplate = `Based on the job description, categorize the job into one or more of the following categories, but select a maximum of 3, ideally just 1: Biz Dev Jobs, Creative Jobs, Delivery Jobs, Design Jobs, Marketing Jobs, Operations Jobs, Strategy Jobs, Tech Jobs. Provide the job categories separated by commas.
+const categoryPromptTemplate = `Based on the job description, categorize the job into one or more of the following categories, but select a maximum of 3, ideally just 1: Biz Dev Jobs, Creative Jobs, Delivery Jobs, Design Jobs, Marketing Jobs, Operations Jobs, Strategy Jobs, Tech Jobs. Provide the job categories separated by commas. Don't provide anything else or that you cannot assign a job. Always give at least one output.
 
 Job Description:`;
 

@@ -129,7 +129,7 @@ const JobCard = ({ job }: JobProps) => {
             </div>
             <div className="flex-grow w-full">
               <div className="flex items-center w-full">
-                <h3 className="text-xl font-bold w-full">{job.title}</h3>
+                <h3 className="text-xl font-bold max-w-[720px] truncate">{job.title}</h3>
                 {isNewJob(job.posted_at) && (
                   <Badge className="ml-2">New</Badge>
                 )}
