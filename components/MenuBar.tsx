@@ -16,13 +16,13 @@ const MenuBar: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-between p-4 w-full max-w-screen-lg mx-auto">
+    <div className="flex items-center justify-between w-full max-w-screen-lg mx-auto">
       <Link href="/">
         <Image src={cacLogo} alt="CAC Logo" width={80} height={40} />
       </Link>
       <Button onClick={handleButtonClick}>
         <Bell className="mr-2 h-4 w-4" />
-        Job Alerts
+        Create Job Alert
       </Button>
     </div>
   );

@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import supabase from '@/utils/supabase/client';
 import CompanyCard from '@/components/CompanyCard';
+import CompanySkeleton from '@/components/CompanySkeleton';
 import Header from '@/components/HeaderAgencies';
 import Footer from '@/components/Footer';
 import NavigationTabs from '@/components/NavigationTabs';
 import CompanyFilterComponent from '@/components/CompanyFilter';
+import SuggestAgencyComponent from '@/components/SuggestAgencyComponent';
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import Banner from '@/components/Banner';
@@ -145,7 +147,11 @@ export default function Companies() {
         clearAllFilters={clearAllFilters}
       />
       {loading ? (
-        <div>Loading companies...</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <CompanySkeleton key={index} />
+          ))}
+        </div>
       ) : (
         <div>
           {filteredCompanies.length > 0 && (
@@ -185,6 +191,9 @@ export default function Companies() {
                 )}
               </Button>
             </div>
+          )}
+          {filteredCompanies.length === 0 && (
+            <SuggestAgencyComponent />
           )}
         </div>
       )}

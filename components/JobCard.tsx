@@ -64,10 +64,13 @@ const JobCard = ({ job }: JobProps) => {
 
   return (
     <Link href={`/jobs/${job.id}`} passHref>
-      <div className={`p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 relative ${isMobile ? 'flex flex-col' : 'flex items-center'} h-full w-full`}>
+      <div className={`relative p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 ${isMobile ? 'flex flex-col' : 'flex items-center'} h-full w-full`}>
+        {isMobile && isNewJob(job.posted_at) && (
+          <Badge className="absolute top-3 left-3">New</Badge>
+        )}
         {isMobile ? (
           <>
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-4 w-full">
               <img
                 src={job.company_logo}
                 alt={job.agency_name}
@@ -75,15 +78,12 @@ const JobCard = ({ job }: JobProps) => {
               />
               <div className="flex flex-col w-full ml-4">
                 <div className="flex items-center">
-                  <h3 className="text-lg font-bold">{job.title}</h3>
-                  {isNewJob(job.posted_at) && (
-                    <Badge className="ml-2">New</Badge>
-                  )}
+                  <h3 className="text-lg font-bold w-full">{job.title}</h3>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col text-left">
-              <div className="flex flex-wrap items-center text-gray-700 mb-2">
+            <div className="flex flex-col text-left w-full">
+              <div className="flex flex-wrap items-center text-gray-700 mb-2 w-full">
                 <Link href={`/agencies/${job.agency_id}`} passHref>
                   <span className="hover:underline cursor-pointer mr-4">
                     {job.agency_name}
@@ -102,7 +102,7 @@ const JobCard = ({ job }: JobProps) => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-4 w-full">
                 {job.employment_type && (
                   <div className="flex items-center text-gray-700">
                     <Briefcase className="mr-1 h-4 w-4 inline" />
@@ -127,14 +127,14 @@ const JobCard = ({ job }: JobProps) => {
                 className="w-16 h-16 rounded-full mr-4"
               />
             </div>
-            <div className="flex-grow">
-              <div className="flex items-center">
-                <h3 className="text-xl font-bold">{job.title}</h3>
+            <div className="flex-grow w-full">
+              <div className="flex items-center w-full">
+                <h3 className="text-xl font-bold w-full">{job.title}</h3>
                 {isNewJob(job.posted_at) && (
                   <Badge className="ml-2">New</Badge>
                 )}
               </div>
-              <div className="flex flex-wrap items-center text-gray-700 mt-2">
+              <div className="flex flex-wrap items-center text-gray-700 mt-2 w-full">
                 <Link href={`/agencies/${job.agency_id}`} passHref>
                   <span className="hover:underline cursor-pointer mr-4">
                     {job.agency_name}
@@ -153,7 +153,7 @@ const JobCard = ({ job }: JobProps) => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-wrap items-center gap-4 mt-2">
+              <div className="flex flex-wrap items-center gap-4 mt-2 w-full">
                 {job.employment_type && (
                   <div className="flex items-center text-gray-700">
                     <Briefcase className="mr-1 h-4 w-4 inline" />

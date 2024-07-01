@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const BackLink: React.FC = () => {
   const pathname = usePathname();
-  const previousPath = pathname.includes('/agencies') ? '/agencies' : '/jobs';
+  const previousPath = pathname.includes('/agencies') ? '/agencies' : '/';
 
   return (
     <div className="pb-4"> {/* Added padding below the button */}

@@ -9,7 +9,7 @@ const JobAlertButton: React.FC = () => {
       <Link href="/job-alerts">
         <span className="flex items-center">
           <Bell className="mr-2 h-4 w-4" />
-          Create job alert
+          Create Job Alert
         </span>
       </Link>
     </Button>

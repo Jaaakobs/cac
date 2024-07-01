@@ -19,7 +19,7 @@ const openai = new OpenAI({
 
 const generateOpenAIResponse = async (description: string, promptTemplate: string) => {
   const response = await openai.chat.completions.create({
-    model: 'gpt-4o',
+    model: 'gpt-4',
     messages: [
       { role: 'system', content: 'You are a helpful assistant.' },
       { role: 'user', content: `${promptTemplate}\n${description}` },
@@ -54,6 +54,7 @@ export async function POST() {
     const { data: agencies, error: agenciesError } = await supabase
       .from('agencies')
       .select('*')
+      .eq('job_scraping', true)
       .not('linkedin_jobs_url', 'is', null);
 
     if (agenciesError) {
@@ -70,7 +71,7 @@ export async function POST() {
       // Fetch current jobs from the database
       const { data: currentJobs, error: currentJobsError } = await supabase
         .from('jobs')
-        .select('*')
+        .select('id')
         .eq('agency_id', agency.id);
 
       if (currentJobsError) {
@@ -78,7 +79,18 @@ export async function POST() {
         return NextResponse.json({ error: 'Error fetching current jobs' }, { status: 500 });
       }
 
-      const currentJobsMap = new Map(currentJobs.map(job => [job.id, job]));
+      const currentJobIds = currentJobs.map(job => job.id);
+
+      // Mark all current jobs as inactive
+      const { error: deactivateError } = await supabase
+        .from('jobs')
+        .update({ status: 'inactive', updated_at: new Date().toISOString() })
+        .eq('agency_id', agency.id);
+
+      if (deactivateError) {
+        console.error('Error deactivating jobs:', deactivateError);
+        return NextResponse.json({ error: 'Error deactivating jobs' }, { status: 500 });
+      }
 
       // Fetch new jobs from Apify
       const runInput = {
@@ -110,93 +122,49 @@ export async function POST() {
 
         const jobCategory = await generateOpenAIResponse(item.descriptionText, categoryPromptTemplate);
         const jobScore = await generateOpenAIResponse(item.descriptionText, scorePromptTemplate);
-        const cacDescription = await generateOpenAIResponse(item.descriptionText, summaryPromptTemplate);
 
-        const existingJob = currentJobsMap.get(item.id);
-        let jobData;
-
-        if (existingJob) {
-          // Update existing job, keep AI-generated fields
-          jobData = {
-            ...existingJob,
-            title: item.title,
-            company_logo: item.companyLogo,
-            location: item.location,
-            posted_at: item.postedAt,
-            job_function: item.jobFunction,
-            seniority_level: item.seniorityLevel,
-            employment_type: item.employmentType,
-            apply_url: item.applyUrl,
-            link: item.link,
-            industries: item.industries,
-            agency_industry: agency.industry,
-            description_html: item.descriptionHtml,
-            description_text: item.descriptionText,
-            salary_info: item.salaryInfo.join(', '),
-            benefits: item.benefits.join(', '),
-            company_description: item.companyDescription,
-            company_website: item.companyWebsite,
-            company_slogan: item.companySlogan,
-            company_employees_count: item.companyEmployeesCount,
-            applicants_count: item.applicantsCount,
-            company_linkedin_url: item.companyLinkedinUrl,
-            created_at: existingJob.created_at, // Keep original created_at
-            updated_at: new Date().toISOString(), // Update updated_at
-            status: 'active', // Mark as active
-          };
-        } else {
-          // Insert new job
-          jobData = {
-            id: item.id,
-            title: item.title,
-            agency_name: item.companyName,
-            company_logo: item.companyLogo,
-            location: item.location,
-            posted_at: item.postedAt,
-            job_function: item.jobFunction,
-            seniority_level: item.seniorityLevel,
-            employment_type: item.employmentType,
-            apply_url: item.applyUrl,
-            link: item.link,
-            industries: item.industries,
-            agency_industry: agency.industry,
-            agency_id: agency.id,
-            description_html: item.descriptionHtml,
-            description_text: item.descriptionText,
-            salary_info: item.salaryInfo.join(', '),
-            benefits: item.benefits.join(', '),
-            company_description: item.companyDescription,
-            company_website: item.companyWebsite,
-            company_slogan: item.companySlogan,
-            company_employees_count: item.companyEmployeesCount,
-            applicants_count: item.applicantsCount,
-            company_linkedin_url: item.companyLinkedinUrl,
-            job_score: jobScore,
-            job_category: jobCategory,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            german_score: german_score,
-            english_score: english_score,
-            cac_description: cacDescription,
-            status: 'active', // Mark as active
-          };
-        }
+        const jobData = {
+          id: item.id,
+          title: item.title,
+          agency_name: agency.agency_name, // Use agency name from the database
+          company_logo: item.companyLogo,
+          location: item.location,
+          posted_at: item.postedAt,
+          job_function: item.jobFunction,
+          seniority_level: item.seniorityLevel,
+          employment_type: item.employmentType,
+          apply_url: item.applyUrl,
+          link: item.link,
+          industries: item.industries,
+          agency_industry: agency.industry,
+          agency_id: agency.id,
+          description_html: item.descriptionHtml,
+          description_text: item.descriptionText,
+          salary_info: item.salaryInfo.join(', '),
+          benefits: item.benefits.join(', '),
+          company_description: item.companyDescription,
+          company_website: item.companyWebsite,
+          company_slogan: item.companySlogan,
+          company_employees_count: item.companyEmployeesCount,
+          applicants_count: item.applicantsCount,
+          company_linkedin_url: item.companyLinkedinUrl,
+          job_score: jobScore,
+          job_category: jobCategory,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          german_score: german_score,
+          english_score: english_score,
+          status: 'active', // Mark as active
+        };
 
         jobsToUpsert.push(jobData);
         processedJobIds.add(item.id);
       }
 
-      // Mark old jobs as inactive
-      for (const job of currentJobs) {
-        if (!processedJobIds.has(job.id)) {
-          job.status = 'inactive';
-          job.updated_at = new Date().toISOString();
-          jobsToUpsert.push(job);
-        }
-      }
-
-      // Upsert jobs
-      const { error: upsertError } = await supabase.from('jobs').upsert(jobsToUpsert);
+      // Upsert new and existing jobs
+      const { error: upsertError } = await supabase.from('jobs').upsert(jobsToUpsert, {
+        onConflict: 'id', // Use 'id' as a single string
+      });
 
       if (upsertError) {
         console.error('Error upserting jobs:', upsertError);
@@ -212,6 +180,13 @@ export async function POST() {
     return NextResponse.json({ error: 'Error scraping jobs' }, { status: 500 });
   }
 }
+
+
+
+
+
+
+
 
 // Prompt templates
 const languagePromptTemplate = `Based on the job description for a position located in Germany, determine the required language proficiency levels. Select up to two languages, choosing from German and English, and specify their proficiency levels. The language proficiency levels available are: German (B2), German (C1), German (C2), English (B2), English (C1), and English (C2). Output the language proficiency levels in the format 'Language Proficiency (Level)', separated by a comma if selecting two. Focus solely on providing the language proficiency levels in your response, without including any additional information or context.
@@ -235,9 +210,5 @@ const scorePromptTemplate = `Evaluate the job description and assign a job score
 - High: The job offer is extremely interesting and rare.
 
 Provide only the job score without any additional information.
-
-Job Description:`;
-
-const summaryPromptTemplate = `Write a short paragraph summarizing what the Creative Agency Career team thinks about this job. The summary should be a bit critical, fitting to the job score, but also highlight the job ad's key features. Make the summary short and engaging for the reader. Don't write Creative Agency Career Team in the summary, use words like 'we', 'us' etc.
 
 Job Description:`;

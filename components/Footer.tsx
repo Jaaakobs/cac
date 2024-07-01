@@ -4,10 +4,12 @@ import cacLogo from '@/images/CAC-Logo-space.svg';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="p-4 mt-8">
+    <footer className="pb-4 mt-8">
       <div className="max-w-screen-lg mx-auto flex flex-col items-center space-y-4 md:flex-row md:justify-between md:space-y-0 md:items-center">
         <div className="flex justify-center w-full md:w-auto md:justify-start">
-          <Image src={cacLogo} alt="CAC Logo" width={100} height={100} />
+          <Link href="/" passHref>
+            <Image src={cacLogo} alt="CAC Logo" width={100} height={100} className="cursor-pointer" />
+          </Link>
         </div>
         <div className="text-center italic md:flex md:items-center md:space-x-2">
           <Link href="/about-us" className="hover:accent-foreground transition">
