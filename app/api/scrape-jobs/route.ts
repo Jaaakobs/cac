@@ -46,6 +46,10 @@ const extractLanguageScores = (languageScores: string) => {
   return { german_score, english_score };
 };
 
+const parseBigInt = (value: string | undefined) => {
+  return value ? parseInt(value, 10) || null : null;
+};
+
 export async function POST() {
   try {
     console.log('Starting job scraping process...');
@@ -66,30 +70,27 @@ export async function POST() {
 
     // Iterate over each agency and fetch jobs
     for (const agency of agencies) {
-      console.log(`Processing agency: ${agency.agency_name}`);
-
-      // Fetch current jobs from the database
-      const { data: currentJobs, error: currentJobsError } = await supabase
-        .from('jobs')
-        .select('id')
-        .eq('agency_id', agency.id);
-
-      if (currentJobsError) {
-        console.error('Error fetching current jobs:', currentJobsError);
-        return NextResponse.json({ error: 'Error fetching current jobs' }, { status: 500 });
+      if (agency.last_scraped_date) {
+        const lastScraped = new Date(agency.last_scraped_date);
+        const now = new Date();
+        const diffHours = (now.getTime() - lastScraped.getTime()) / 1000 / 60 / 60;
+        if (diffHours < 24) {
+          console.log(`Skipping agency: ${agency.agency_name}, scraped within the last 24 hours.`);
+          continue;
+        }
       }
 
-      const currentJobIds = currentJobs.map(job => job.id);
+      console.log(`Processing agency: ${agency.agency_name}`);
 
-      // Mark all current jobs as inactive
-      const { error: deactivateError } = await supabase
+      // Mark all current jobs for the agency as inactive
+      const { error: updateError } = await supabase
         .from('jobs')
-        .update({ status: 'inactive', updated_at: new Date().toISOString() })
+        .update({ status: 'inactive' })
         .eq('agency_id', agency.id);
 
-      if (deactivateError) {
-        console.error('Error deactivating jobs:', deactivateError);
-        return NextResponse.json({ error: 'Error deactivating jobs' }, { status: 500 });
+      if (updateError) {
+        console.error('Error marking current jobs as inactive:', updateError);
+        return NextResponse.json({ error: 'Error marking current jobs as inactive' }, { status: 500 });
       }
 
       // Fetch new jobs from Apify
@@ -112,10 +113,15 @@ export async function POST() {
       const run = await apifyClient.actor('gdbRh93zn42kBYDyS').call(runInput);
       const { items: newJobs } = await apifyClient.dataset(run.defaultDatasetId).listItems();
 
+      const jobIds = new Set();
       const jobsToUpsert = [];
-      const processedJobIds = new Set();
 
       for (const item of newJobs) {
+        if (jobIds.has(item.id)) {
+          console.warn(`Duplicate job ID found: ${item.id}. Skipping.`);
+          continue;
+        }
+
         // Generate OpenAI responses for each job description
         const languageScores = await generateOpenAIResponse(item.descriptionText, languagePromptTemplate);
         const { german_score, english_score } = extractLanguageScores(languageScores);
@@ -126,7 +132,7 @@ export async function POST() {
         const jobData = {
           id: item.id,
           title: item.title,
-          agency_name: agency.agency_name, // Use agency name from the database
+          agency_name: agency.agency_name,
           company_logo: item.companyLogo,
           location: item.location,
           posted_at: item.postedAt,
@@ -145,8 +151,8 @@ export async function POST() {
           company_description: item.companyDescription,
           company_website: item.companyWebsite,
           company_slogan: item.companySlogan,
-          company_employees_count: item.companyEmployeesCount,
-          applicants_count: item.applicantsCount,
+          company_employees_count: parseBigInt(item.companyEmployeesCount),
+          applicants_count: parseBigInt(item.applicantsCount),
           company_linkedin_url: item.companyLinkedinUrl,
           job_score: jobScore,
           job_category: jobCategory,
@@ -158,20 +164,33 @@ export async function POST() {
         };
 
         jobsToUpsert.push(jobData);
-        processedJobIds.add(item.id);
+        jobIds.add(item.id);
       }
 
-      // Upsert new and existing jobs
-      const { error: upsertError } = await supabase.from('jobs').upsert(jobsToUpsert, {
-        onConflict: 'id', // Use 'id' as a single string
-      });
+      // Upsert jobs
+      const { error: upsertError } = await supabase.from('jobs').upsert(jobsToUpsert, { onConflict: 'id' });
 
       if (upsertError) {
         console.error('Error upserting jobs:', upsertError);
         return NextResponse.json({ error: 'Error upserting jobs' }, { status: 500 });
       }
 
-      console.log('Job listings updated successfully');
+      // Update the agency's last_scraped_date, open_jobs, and closed_jobs
+      const { error: agencyUpdateError } = await supabase
+        .from('agencies')
+        .update({
+          last_scraped_date: new Date().toISOString(),
+          open_jobs: jobsToUpsert.filter(job => job.status === 'active').length,
+          closed_jobs: jobsToUpsert.filter(job => job.status === 'inactive').length,
+        })
+        .eq('id', agency.id);
+
+      if (agencyUpdateError) {
+        console.error('Error updating agency:', agencyUpdateError);
+        return NextResponse.json({ error: 'Error updating agency' }, { status: 500 });
+      }
+
+      console.log('Job listings updated successfully for agency:', agency.agency_name);
     }
 
     return NextResponse.json({ message: 'Job listings updated successfully' });
@@ -180,10 +199,6 @@ export async function POST() {
     return NextResponse.json({ error: 'Error scraping jobs' }, { status: 500 });
   }
 }
-
-
-
-
 
 
 

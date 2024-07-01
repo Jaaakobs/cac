@@ -85,8 +85,8 @@ const JobAlerts = () => {
                 <li>And there you have it! Your personalized job selection awaits you in the one email you'll actually enjoy reading.</li>
               </ul>
             </div>
-            <div className="md:col-span-2 p-6 rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Create your Job Alerts</h2>
+            <div className="bg-white md:col-span-2 p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-4">Create your job alerts</h2>
               <JobAlertForm
                 locations={locations}
                 jobFunctions={jobFunctions}

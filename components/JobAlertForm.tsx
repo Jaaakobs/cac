@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronRight } from "lucide-react";
 import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -349,7 +350,11 @@ const JobAlertForm: React.FC<JobAlertFormProps> = ({ locations, jobFunctions, in
               </FormItem>
             )}
           />
-          <Button type="submit">Create Job Alert</Button>
+        <Button type="submit" className="flex items-center gap-2 w-full sm:w-auto">
+        Create Job Alert
+        <ChevronRight className="h-4 w-4" />
+      </Button>
+
         </form>
       </Form>
 
