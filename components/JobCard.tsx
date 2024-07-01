@@ -64,7 +64,7 @@ const JobCard = ({ job }: JobProps) => {
 
   return (
     <Link href={`/jobs/${job.id}`} passHref>
-      <div className={`relative p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 ${isMobile ? 'flex flex-col' : 'flex items-center'} h-full w-full`}>
+      <div className={`relative p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 ${isMobile ? 'flex flex-col' : 'flex items-center'} w-full`}>
         {isMobile && isNewJob(job.posted_at) && (
           <Badge className="absolute top-3 left-3">New</Badge>
         )}

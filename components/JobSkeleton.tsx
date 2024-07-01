@@ -7,7 +7,7 @@ const JobSkeleton = () => {
       <div className="flex-shrink-0">
         <Skeleton className="w-16 h-16 rounded-full mr-4" />
       </div>
-      <div className="flex-grow">
+      <div className="flex-grow w-full">
         <div className="flex items-center w-full">
           <Skeleton className="h-4 w-3/4 mb-2" />
           <Skeleton className="h-4 w-1/4 ml-2" />
