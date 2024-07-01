@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useJobs, Job } from '@/utils/supabase/hooks/useJobs';
 import JobCard from '@/components/JobCard';
+import JobSkeleton from '@/components/JobSkeleton';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FilterComponent from '@/components/JobFilter';
@@ -123,7 +124,11 @@ export default function Jobs() {
         />
       </div>
       {loading ? (
-        <div>Loading...</div>
+        <div className="space-y-4">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <JobSkeleton key={index} />
+          ))}
+        </div>
       ) : (
         <div className="block w-full max-w-[1088px] mx-auto">
           {filteredJobs.length > 0 && (
