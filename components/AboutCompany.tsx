@@ -27,7 +27,7 @@ const AboutCompany = ({ company }: CompanyProps) => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
+    <div className="p-6">
       <div className="flex items-center mb-4">
         <img
           src={company.profile_photo}
@@ -51,7 +51,7 @@ const AboutCompany = ({ company }: CompanyProps) => {
       </div>
       <div className="flex space-x-4 mb-4">
         {company.website && (
-          <Badge className="flex items-center bg-gray-100 text-gray-700 px-3 py-1">
+          <Badge>
             <Globe className="mr-2 h-4 w-4" />
             <Link href={company.website} target="_blank" rel="noopener noreferrer">
               Website
@@ -59,8 +59,8 @@ const AboutCompany = ({ company }: CompanyProps) => {
           </Badge>
         )}
         {company.linkedin_url && (
-          <Badge className="flex items-center bg-gray-100 text-gray-700 px-3 py-1">
-            <Linkedin className="mr-2 h-4 w-4" />
+          <Badge>
+            <Linkedin  className="mr-2 h-4 w-4" />
             <Link href={company.linkedin_url} target="_blank" rel="noopener noreferrer">
               LinkedIn
             </Link>

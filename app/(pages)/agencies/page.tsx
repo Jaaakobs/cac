@@ -8,10 +8,8 @@ import Header from '@/components/HeaderAgencies';
 import Footer from '@/components/Footer';
 import NavigationTabs from '@/components/NavigationTabs';
 import CompanyFilterComponent from '@/components/CompanyFilter';
-import SuggestAgencyComponent from '@/components/SuggestAgencyComponent';
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import Banner from '@/components/Banner';
 import MenuBar from '@/components/MenuBar';
 
 export type Company = {
@@ -133,7 +131,6 @@ export default function Companies() {
 
   return (
     <div className="p-6 max-w-screen-lg px-4 mx-auto">
-      <Banner />
       <MenuBar />
       <Header />
       <NavigationTabs />
@@ -191,9 +188,6 @@ export default function Companies() {
                 )}
               </Button>
             </div>
-          )}
-          {filteredCompanies.length === 0 && (
-            <SuggestAgencyComponent />
           )}
         </div>
       )}

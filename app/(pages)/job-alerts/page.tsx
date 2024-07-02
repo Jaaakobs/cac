@@ -69,7 +69,6 @@ const employmentTypes = [
 const JobAlerts = () => {
   return (
     <div className="p-6 max-w-screen-lg px-4 mx-auto">
-      <Banner />
       <MenuBar />
       <Header />
       <NavigationTabs />

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useJobs, Job } from '@/utils/supabase/hooks/useJobs';
-import JobCardDif from '@/components/JobCardDif';
+import JobCard from '@/components/JobCard';
+import JobSkeleton from '@/components/JobSkeleton';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FilterComponent from '@/components/JobFilter';
@@ -10,7 +11,6 @@ import NavigationTabs from '@/components/NavigationTabs';
 import SubscriptionComponent from '@/components/SubscriptionComponent';
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import Banner from '@/components/Banner';
 import MenuBar from '@/components/MenuBar';
 
 export default function Jobs() {
@@ -70,6 +70,7 @@ export default function Jobs() {
       });
 
       setFilteredJobs(sorted);
+      console.log("Filtered jobs:", sorted); // Debug log
     }
   }, [loading, jobs, filter, sortOption]);
 
@@ -79,6 +80,10 @@ export default function Jobs() {
       setVisibleJobsCount(prevCount => prevCount + 20);
       setLoadingMore(false);
     }, 1000);
+  };
+
+  const handleFilterChange = (filterUpdate: any) => {
+    setFilter(filterUpdate);
   };
 
   const clearFilter = (name: string) => {
@@ -101,12 +106,11 @@ export default function Jobs() {
   };
 
   return (
-    <div className="bg-background p-6 max-w-screen-lg px-4 mx-auto">
-      <Banner />
+    <div className="bg p-6 max-w-screen-lg px-4 mx-auto">
       <MenuBar />
       <Header />
       <NavigationTabs />
-      <div className="pt-4 max-w-[1088px] mx-auto">
+      <div className="pt-4">
         <FilterComponent
           filter={filter}
           setFilter={setFilter}
@@ -119,9 +123,13 @@ export default function Jobs() {
         />
       </div>
       {loading ? (
-        <div>Loading job listings...</div>
+        <div className="space-y-4">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <JobSkeleton key={index} />
+          ))}
+        </div>
       ) : (
-        <div className="block w-full max-w-[1088px] mx-auto">
+        <div className="block w-full mx-auto">
           {filteredJobs.length > 0 && (
             <div className="flex items-center justify-between mt-4 text-sm w-full mb-4">
               <div>
@@ -149,7 +157,7 @@ export default function Jobs() {
             <>
               <div className="flex flex-col gap-0">
                 {filteredJobs.slice(0, visibleJobsCount).map((job) => (
-                  <JobCardDif key={job.id} job={job} />
+                  <JobCard key={job.id} job={job} />
                 ))}
               </div>
               {visibleJobsCount < filteredJobs.length && (
@@ -168,7 +176,10 @@ export default function Jobs() {
               )}
             </>
           ) : (
-            <SubscriptionComponent />
+            <>
+              <h2 className="text-xl font-bold text-center mb-4">No jobs matching this criteria</h2>
+              <SubscriptionComponent />
+            </>
           )}
         </div>
       )}

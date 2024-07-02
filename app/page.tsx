@@ -11,7 +11,6 @@ import NavigationTabs from '@/components/NavigationTabs';
 import SubscriptionComponent from '@/components/SubscriptionComponent';
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-import Banner from '@/components/Banner';
 import MenuBar from '@/components/MenuBar';
 
 export default function Jobs() {
@@ -107,12 +106,11 @@ export default function Jobs() {
   };
 
   return (
-    <div className="bg-background p-6 max-w-screen-lg px-4 mx-auto">
-      <Banner />
+    <div className="bg p-6 max-w-screen-lg px-4 mx-auto">
       <MenuBar />
       <Header />
       <NavigationTabs />
-      <div className="pt-4 max-w-[1088px] mx-auto">
+      <div className="pt-4">
         <FilterComponent
           filter={filter}
           setFilter={setFilter}
@@ -131,7 +129,7 @@ export default function Jobs() {
           ))}
         </div>
       ) : (
-        <div className="block w-full max-w-[1088px] mx-auto">
+        <div className="block w-full mx-auto">
           {filteredJobs.length > 0 && (
             <div className="flex items-center justify-between mt-4 text-sm w-full mb-4">
               <div>

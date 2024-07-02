@@ -1,19 +1,25 @@
 import { Instagram, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
-const Banner: React.FC = () => {
+type BannerProps = {
+  onClose: () => void;
+};
+
+const Banner: React.FC<BannerProps> = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const bannerClosed = sessionStorage.getItem('bannerClosed');
     if (bannerClosed === 'true') {
       setIsVisible(false);
+      onClose();
     }
-  }, []);
+  }, [onClose]);
 
   const handleClose = () => {
     sessionStorage.setItem('bannerClosed', 'true');
     setIsVisible(false);
+    onClose();
   };
 
   if (!isVisible) {

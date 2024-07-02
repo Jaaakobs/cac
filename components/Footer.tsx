@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import cacLogo from '@/images/CAC-Logo-space.svg';
+import cacLogo from '@/images/cac-logo.png';
 
 const Footer: React.FC = () => {
   return (
