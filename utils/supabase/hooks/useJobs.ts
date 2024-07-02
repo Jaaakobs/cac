@@ -85,6 +85,7 @@ export const useJobs = () => {
       if (error) {
         console.error("Error fetching jobs:", error);
       } else {
+        console.log("Fetched jobs:", data); // Add this line
         setJobs(data || []);
         const uniqueLocations = Array.from(new Set(data.map(job => job.location)));
         const uniqueJobCategories = Array.from(new Set(data.map(job => job.job_category)));

@@ -71,6 +71,7 @@ export default function Jobs() {
       });
 
       setFilteredJobs(sorted);
+      console.log("Filtered jobs:", sorted); // Debug log
     }
   }, [loading, jobs, filter, sortOption]);
 
