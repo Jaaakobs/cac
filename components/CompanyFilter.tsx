@@ -77,7 +77,7 @@ const CompanyFilterComponent: React.FC<CompanyFilterComponentProps> = ({
             className="border border-gray-300 p-3 pl-10 w-full rounded-lg h-12"
           />
         </div>
-        <Button variant="secondary" className="md:hidden w-full" onClick={() => setDrawerOpen(true)}>
+        <Button variant="outline" className="md:hidden w-full" onClick={() => setDrawerOpen(true)}>
           <Filter className="mr-2 h-4 w-4" />
           All filters
         </Button>
