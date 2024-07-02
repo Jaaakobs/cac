@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useJobs, Job } from '@/utils/supabase/hooks/useJobs';
-import JobCard from '@/components/jobCardNew';
-import JobSkeleton from '@/components/JobSkeleton';
+import JobCard from '@/components/JobCard';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FilterComponent from '@/components/JobFilter';
@@ -107,84 +106,77 @@ export default function Jobs() {
 
   return (
     <div className="bg-background p-6 max-w-screen-lg px-4 mx-auto">
-      <Banner />
-      <MenuBar />
-      <Header />
-      <NavigationTabs />
-      <div className="pt-4 max-w-[1088px] mx-auto">
-        <FilterComponent
-          filter={filter}
-          setFilter={setFilter}
-          locations={locations.map(loc => ({ value: loc, label: loc }))}
-          jobCategories={jobCategories}
-          agencyIndustries={agencyIndustries}
-          agencyNames={agencyNames}
-          clearFilter={clearFilter}
-          clearAllFilters={clearAllFilters}
-        />
-      </div>
-      {loading ? (
-        <div className="space-y-4">
-          {Array.from({ length: 5 }).map((_, index) => (
-            <JobSkeleton key={index} />
-          ))}
-        </div>
-      ) : (
-        <div className="block w-full max-w-[1088px] mx-auto">
-          {filteredJobs.length > 0 && (
-            <div className="flex items-center justify-between mt-4 text-sm w-full mb-4">
-              <div>
-                Showing <span className="font-bold">{filteredJobs.length}</span> job{filteredJobs.length !== 1 ? 's' : ''}
-              </div>
-              <div className="flex items-center">
-                <span>Sort by: </span>
-                <button
-                  className={`ml-2 ${sortOption === 'relevance' ? 'font-medium text-black' : 'text-blue-500'}`}
-                  onClick={() => setSortOption('relevance')}
-                >
-                  Relevance
-                </button>
-                <span className="mx-2">-</span>
-                <button
-                  className={`${sortOption === 'date' ? 'font-medium text-black' : 'text-blue-500'}`}
-                  onClick={() => setSortOption('date')}
-                >
-                  Date
-                </button>
-              </div>
-            </div>
-          )}
-          {filteredJobs.length > 0 ? (
-            <>
-              <div className="flex flex-col gap-0">
-                {filteredJobs.slice(0, visibleJobsCount).map((job) => (
-                  <JobCard key={job.id} job={job} />
-                ))}
-              </div>
-              {visibleJobsCount < filteredJobs.length && (
-                <div className="flex justify-center items-center mt-4 mb-4">
-                  <Button onClick={loadMoreJobs} disabled={loadingMore}>
-                    {loadingMore ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Please wait
-                      </>
-                    ) : (
-                      'Load More'
-                    )}
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              <h2 className="text-xl font-bold text-center mb-4">No jobs matching this criteria</h2>
-              <SubscriptionComponent />
-            </>
-          )}
+  <Banner />
+  <MenuBar />
+  <Header />
+  <NavigationTabs />
+  <div className="pt-4 max-w-[1088px] mx-auto">
+    <FilterComponent
+      filter={filter}
+      setFilter={setFilter}
+      locations={locations.map(loc => ({ value: loc, label: loc }))}
+      jobCategories={jobCategories}
+      agencyIndustries={agencyIndustries}
+      agencyNames={agencyNames}
+      clearFilter={clearFilter}
+      clearAllFilters={clearAllFilters}
+    />
+  </div>
+  {loading ? (
+    <div>Loading job listings...</div>
+  ) : (
+    <div className="block w-full max-w-[1088px] mx-auto">
+      {filteredJobs.length > 0 && (
+        <div className="flex items-center justify-between mt-4 text-sm w-full mb-4">
+          <div>
+            Showing <span className="font-bold">{filteredJobs.length}</span> job{filteredJobs.length !== 1 ? 's' : ''}
+          </div>
+          <div className="flex items-center">
+            <span>Sort by: </span>
+            <button
+              className={`ml-2 ${sortOption === 'relevance' ? 'font-medium text-black' : 'text-blue-500'}`}
+              onClick={() => setSortOption('relevance')}
+            >
+              Relevance
+            </button>
+            <span className="mx-2">-</span>
+            <button
+              className={`${sortOption === 'date' ? 'font-medium text-black' : 'text-blue-500'}`}
+              onClick={() => setSortOption('date')}
+            >
+              Date
+            </button>
+          </div>
         </div>
       )}
-      <Footer />
+      {filteredJobs.length > 0 ? (
+        <>
+          <div className="flex flex-col gap-0">
+            {filteredJobs.slice(0, visibleJobsCount).map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+          </div>
+          {visibleJobsCount < filteredJobs.length && (
+            <div className="flex justify-center items-center mt-4 mb-4">
+              <Button onClick={loadMoreJobs} disabled={loadingMore}>
+                {loadingMore ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  'Load More'
+                )}
+              </Button>
+            </div>
+          )}
+        </>
+      ) : (
+        <SubscriptionComponent />
+      )}
     </div>
+  )}
+  <Footer />
+</div>
   );
 }
