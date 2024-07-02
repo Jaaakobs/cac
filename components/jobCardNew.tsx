@@ -1,6 +1,5 @@
 import { MapPin, Briefcase, BarChart, Folder, ChevronRight, Calendar } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 
 type JobProps = {
@@ -49,22 +48,12 @@ const isNewJob = (postedAt: string) => {
 
 const JobCard = ({ job }: JobProps) => {
   const firstLocationWord = job.location ? job.location.split(",")[0] : "";
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 640);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const postedAtText = getPostedAtText(job.posted_at);
 
   return (
     <Link href={`/jobs/${job.id}`} passHref>
-      <div className="relative p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row items-center h-full w-full">
+      <div className="relative p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row items-center w-full">
         {isNewJob(job.posted_at) && (
           <Badge className="absolute top-3 left-3">New</Badge>
         )}
