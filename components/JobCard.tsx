@@ -64,7 +64,7 @@ const JobCard = ({ job }: JobProps) => {
 
   return (
     <Link href={`/jobs/${job.id}`} passHref>
-      <div className={`relative p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 ${isMobile ? 'flex flex-col' : 'flex items-center'} w-full`}>
+      <div className={`relative p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 ${isMobile ? 'flex flex-col' : 'flex items-center'} h-full w-full min-w-full`}>
         {isMobile && isNewJob(job.posted_at) && (
           <Badge className="absolute top-3 left-3">New</Badge>
         )}
@@ -77,7 +77,7 @@ const JobCard = ({ job }: JobProps) => {
                 className="w-16 h-16 rounded-full"
               />
               <div className="flex flex-col w-full ml-4">
-                <div className="flex items-center">
+                <div className="flex items-center w-full">
                   <h3 className="text-lg font-bold w-full">{job.title}</h3>
                 </div>
               </div>
@@ -129,7 +129,7 @@ const JobCard = ({ job }: JobProps) => {
             </div>
             <div className="flex-grow w-full">
               <div className="flex items-center w-full">
-                <h3 className="text-xl font-bold max-w-[720px] truncate">{job.title}</h3>
+                <h3 className="text-xl font-bold w-full">{job.title}</h3>
                 {isNewJob(job.posted_at) && (
                   <Badge className="ml-2">New</Badge>
                 )}
