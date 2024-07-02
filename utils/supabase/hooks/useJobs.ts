@@ -47,6 +47,7 @@ export const useJobs = () => {
 
   useEffect(() => {
     const fetchJobs = async () => {
+      console.log("Fetching jobs from Supabase...");
       const { data, error } = await supabase.from('jobs').select(`
         id,
         title,
@@ -84,9 +85,13 @@ export const useJobs = () => {
 
       if (error) {
         console.error("Error fetching jobs:", error);
-      } else {
-        console.log("Fetched jobs:", data); // Add this line
-        setJobs(data || []);
+        setLoading(false);
+        return;
+      } 
+
+      if (data) {
+        console.log("Jobs data fetched:", data);
+        setJobs(data);
         const uniqueLocations = Array.from(new Set(data.map(job => job.location)));
         const uniqueJobCategories = Array.from(new Set(data.map(job => job.job_category)));
         const uniqueAgencyIndustries = Array.from(new Set(data.map(job => job.agency_industry)));
@@ -99,22 +104,24 @@ export const useJobs = () => {
 
         if (agenciesError) {
           console.error("Error fetching agency names:", agenciesError);
-        } else {
+        } else if (agenciesData) {
+          console.log("Agencies data fetched:", agenciesData);
           const agencyMap = new Map(agenciesData.map((agency: any) => [agency.id, agency.agency_name]));
-          const agencyNames = data.map(job => agencyMap.get(job.agency_id) || 'Unknown');
-          setAgencyNames(agencyNames);
+          const agencyNamesList = data.map(job => agencyMap.get(job.agency_id) || 'Unknown');
+          setAgencyNames(agencyNamesList);
+
+          setLocations(uniqueLocations);
+          setJobCategories(uniqueJobCategories);
+          setAgencyIndustries(uniqueAgencyIndustries);
+
+          localStorage.setItem('jobs', JSON.stringify(data));
+          localStorage.setItem('locations', JSON.stringify(uniqueLocations));
+          localStorage.setItem('jobCategories', JSON.stringify(uniqueJobCategories));
+          localStorage.setItem('agencyIndustries', JSON.stringify(uniqueAgencyIndustries));
+          localStorage.setItem('agencyNames', JSON.stringify(agencyNamesList));
         }
-
-        setLocations(uniqueLocations);
-        setJobCategories(uniqueJobCategories);
-        setAgencyIndustries(uniqueAgencyIndustries);
-
-        localStorage.setItem('jobs', JSON.stringify(data));
-        localStorage.setItem('locations', JSON.stringify(uniqueLocations));
-        localStorage.setItem('jobCategories', JSON.stringify(uniqueJobCategories));
-        localStorage.setItem('agencyIndustries', JSON.stringify(uniqueAgencyIndustries));
-        localStorage.setItem('agencyNames', JSON.stringify(agencyNames));
       }
+
       setLoading(false);
     };
 
@@ -126,6 +133,7 @@ export const useJobs = () => {
       const agencyNamesData = localStorage.getItem('agencyNames');
 
       if (jobsData && locationsData && jobCategoriesData && agencyIndustriesData && agencyNamesData) {
+        console.log("Fetching data from local storage...");
         setJobs(JSON.parse(jobsData));
         setLocations(JSON.parse(locationsData));
         setJobCategories(JSON.parse(jobCategoriesData));
