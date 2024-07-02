@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useJobs, Job } from '@/utils/supabase/hooks/useJobs';
-import JobCard from '@/components/JobCard';
+import JobCard from '@/components/jobCardNew';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FilterComponent from '@/components/JobFilter';
