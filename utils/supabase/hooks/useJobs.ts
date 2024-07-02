@@ -47,80 +47,84 @@ export const useJobs = () => {
 
   useEffect(() => {
     const fetchJobs = async () => {
-      setLoading(true);
-      const { data, error } = await supabase.from('jobs').select(`
-        id,
-        title,
-        agency_id,
-        agency_name,
-        company_logo,
-        location,
-        posted_at,
-        job_function,
-        seniority_level,
-        employment_type,
-        apply_url,
-        industries,
-        job_category,
-        agency_industry,
-        job_score,
-        status,
-        updated_at,
-        created_at,
-        description_html,
-        description_text,
-        salary_info,
-        benefits,
-        company_description,
-        company_linkedin_url,
-        company_website,
-        company_slogan,
-        company_employees_count,
-        applicants_count,
-        link,
-        german_score,
-        english_score,
-        cac_description
-      `);
+      try {
+        const { data, error } = await supabase.from('jobs').select(`
+          id,
+          title,
+          agency_id,
+          agency_name,
+          company_logo,
+          location,
+          posted_at,
+          job_function,
+          seniority_level,
+          employment_type,
+          apply_url,
+          industries,
+          job_category,
+          agency_industry,
+          job_score,
+          status,
+          updated_at,
+          created_at,
+          description_html,
+          description_text,
+          salary_info,
+          benefits,
+          company_description,
+          company_linkedin_url,
+          company_website,
+          company_slogan,
+          company_employees_count,
+          applicants_count,
+          link,
+          german_score,
+          english_score,
+          cac_description
+        `);
 
-      if (error) {
-        console.error("Error fetching jobs:", error);
+        if (error) {
+          console.error("Error fetching jobs:", error);
+          setLoading(false);
+          return;
+        }
+
+        setJobs(data || []);
+        const uniqueLocations = Array.from(new Set(data.map(job => job.location)));
+        const uniqueJobCategories = Array.from(new Set(data.map(job => job.job_category)));
+        const uniqueAgencyIndustries = Array.from(new Set(data.map(job => job.agency_industry)));
+        const uniqueAgencyIds = Array.from(new Set(data.map(job => job.agency_id)));
+
+        const { data: agenciesData, error: agenciesError } = await supabase
+          .from('agencies')
+          .select('id, agency_name')
+          .in('id', uniqueAgencyIds);
+
+        if (agenciesError) {
+          console.error("Error fetching agency names:", agenciesError);
+          setLoading(false);
+          return;
+        }
+
+        const agencyMap = new Map(agenciesData.map((agency: any) => [agency.id, agency.agency_name]));
+        const agencyNames = data.map(job => agencyMap.get(job.agency_id) || 'Unknown');
+        setAgencyNames(agencyNames);
+
+        setLocations(uniqueLocations);
+        setJobCategories(uniqueJobCategories);
+        setAgencyIndustries(uniqueAgencyIndustries);
+
+        localStorage.setItem('jobs', JSON.stringify(data));
+        localStorage.setItem('locations', JSON.stringify(uniqueLocations));
+        localStorage.setItem('jobCategories', JSON.stringify(uniqueJobCategories));
+        localStorage.setItem('agencyIndustries', JSON.stringify(uniqueAgencyIndustries));
+        localStorage.setItem('agencyNames', JSON.stringify(agencyNames));
+
+      } catch (fetchError) {
+        console.error("An unexpected error occurred:", fetchError);
+      } finally {
         setLoading(false);
-        return;
       }
-
-      setJobs(data || []);
-      const uniqueLocations = Array.from(new Set(data.map(job => job.location)));
-      const uniqueJobCategories = Array.from(new Set(data.map(job => job.job_category)));
-      const uniqueAgencyIndustries = Array.from(new Set(data.map(job => job.agency_industry)));
-      const uniqueAgencyIds = Array.from(new Set(data.map(job => job.agency_id)));
-
-      const { data: agenciesData, error: agenciesError } = await supabase
-        .from('agencies')
-        .select('id, agency_name')
-        .in('id', uniqueAgencyIds);
-
-      if (agenciesError) {
-        console.error("Error fetching agency names:", agenciesError);
-        setLoading(false);
-        return;
-      }
-
-      const agencyMap = new Map(agenciesData.map((agency: any) => [agency.id, agency.agency_name]));
-      const agencyNames = data.map(job => agencyMap.get(job.agency_id) || 'Unknown');
-
-      setLocations(uniqueLocations);
-      setJobCategories(uniqueJobCategories);
-      setAgencyIndustries(uniqueAgencyIndustries);
-      setAgencyNames(agencyNames);
-
-      localStorage.setItem('jobs', JSON.stringify(data));
-      localStorage.setItem('locations', JSON.stringify(uniqueLocations));
-      localStorage.setItem('jobCategories', JSON.stringify(uniqueJobCategories));
-      localStorage.setItem('agencyIndustries', JSON.stringify(uniqueAgencyIndustries));
-      localStorage.setItem('agencyNames', JSON.stringify(agencyNames));
-
-      setLoading(false);
     };
 
     if (dataFetchedRef.current) {

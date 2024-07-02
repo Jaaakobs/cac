@@ -46,21 +46,20 @@ const isNewJob = (postedAt: string) => {
   return diffDays <= 14;
 };
 
-const JobCard = ({ job }: JobProps) => {
+const JobCardDif = ({ job }: JobProps) => {
   const firstLocationWord = job.location ? job.location.split(",")[0] : "";
-
   const postedAtText = getPostedAtText(job.posted_at);
 
   return (
     <Link href={`/jobs/${job.id}`} passHref>
-      <div className="relative p-4 sm:p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row items-center w-full">
+      <div className="relative p-6 bg-white rounded-lg shadow-md mb-6 cursor-pointer hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row items-center w-full">
         {isNewJob(job.posted_at) && (
           <Badge className="absolute top-3 left-3">New</Badge>
         )}
         <img
           src={job.company_logo}
           alt={job.agency_name}
-          className="w-12 h-12 sm:w-16 sm:h-16 rounded-full mb-4 sm:mb-0 sm:mr-4"
+          className="w-16 h-16 rounded-full mr-4"
         />
         <div className="flex-grow w-full">
           <div className="flex items-center w-full">
@@ -114,4 +113,4 @@ const JobCard = ({ job }: JobProps) => {
   );
 };
 
-export default JobCard;
+export default JobCardDif;

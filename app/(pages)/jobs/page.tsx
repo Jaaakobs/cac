@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useJobs, Job } from '@/utils/supabase/hooks/useJobs';
-import JobCard from '@/components/JobCardNew';
+import JobCardDif from '@/components/JobCardDif';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import FilterComponent from '@/components/JobFilter';
@@ -81,10 +81,6 @@ export default function Jobs() {
     }, 1000);
   };
 
-  const handleFilterChange = (filterUpdate: any) => {
-    setFilter(filterUpdate);
-  };
-
   const clearFilter = (name: string) => {
     setFilter({
       ...filter,
@@ -153,7 +149,7 @@ export default function Jobs() {
             <>
               <div className="flex flex-col gap-0">
                 {filteredJobs.slice(0, visibleJobsCount).map((job) => (
-                  <JobCard key={job.id} job={job} />
+                  <JobCardDif key={job.id} job={job} />
                 ))}
               </div>
               {visibleJobsCount < filteredJobs.length && (
