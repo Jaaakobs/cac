@@ -124,11 +124,6 @@ export default function Jobs() {
           clearAllFilters={clearAllFilters}
         />
       </div>
-      <div className="text-center">
-        <p>Loading: {loading.toString()}</p>
-        <p>Number of jobs: {jobs.length}</p>
-        <p>Filtered jobs: {filteredJobs.length}</p>
-      </div>
       {loading ? (
         <div className="space-y-4">
           {Array.from({ length: 5 }).map((_, index) => (
