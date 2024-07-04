@@ -1,7 +1,7 @@
-import { GeistSans } from "geist/font/sans";
+import { anton, open_sans } from './fonts';
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster"; 
-import { CSPostHogProvider } from './providers'
+import { CSPostHogProvider } from './providers';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
+    <html lang="en" className={open_sans.className}>
       <CSPostHogProvider>
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">

@@ -62,7 +62,7 @@ const CompanyFilterComponent: React.FC<CompanyFilterComponentProps> = ({
   };
 
   return (
-    <div className="p-4 border border-border rounded-lg bg-accent mb-6 space-y-4 w-full max-w-[1088px] mx-auto">
+    <div className="p-4 border border-border rounded-lg bg-secondary mb-6 space-y-4 w-full max-w-[1088px] mx-auto">
       <div className="flex flex-col md:flex-row items-center gap-4 w-full">
         <div className="relative flex-1 w-full">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3">
