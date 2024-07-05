@@ -28,7 +28,7 @@ const AboutUs = () => {
   return (
     <div className="bg-background">
       {/* Header Section */}
-      <section className="relative flex flex-col items-center justify-center pt-6 bg-gray-200 w-full" style={{ clipPath: 'ellipse(150% 100% at 50% 0%)' }}>
+      <section className="relative flex flex-col items-center justify-center pt-6 bg-gray-200 w-full" style={{ clipPath: 'ellipse(120% 100% at 50% 0%)' }}>
         <MenuBar />
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center max-w-[1088px]">
           <div className="md:w-1/2 text-center md:text-left">
@@ -73,11 +73,11 @@ const AboutUs = () => {
             <div className="bg-gray-200 p-8 rounded-lg shadow-md flex flex-col items-center text-center w-full h-full transition-transform transform hover:scale-105 hover:shadow-lg">
               <Image src={CAC_BizDev} alt="Biz Dev" width={200} height={150} className="mb-4" />
               <h3 className="text-2xl font-bold text-primary mt-4">No more Generic Job Portals</h3>
-              <p className="text-gray-700 mt-2">We curate openings from the top agencies, from bold powerhouses to those niche studios you <em>wish</em> you knew about.</p>
+              <p className="text-gray-700 mt-2">We curate openings from the top agencies, from bold powerhouses to those niche studios you wish you knew about.</p>
             </div>
             <div className="bg-gray-200 p-8 rounded-lg shadow-md flex flex-col items-center text-center w-full h-full transition-transform transform hover:scale-105 hover:shadow-lg">
               <Image src={CAC_Marketing} alt="Marketing" width={200} height={150} className="mb-4" />
-              <h3 className="text-2xl font-bold text-primary mt-4">Nor application overwhelm</h3>
+              <h3 className="text-2xl font-bold text-primary mt-4">Nor Application Overwhelm</h3>
               <p className="text-gray-700 mt-2">We streamline the process, making it easier than ever to put your best foot forward.</p>
             </div>
           </div>

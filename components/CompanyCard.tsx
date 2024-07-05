@@ -23,7 +23,7 @@ export default function CompanyCard({ company }: CompanyCardProps) {
 
   return (
     <Link href={`/agencies/${company.id}`} passHref>
-      <div className="flex flex-col items-start p-4 border border rounded-lg bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 w-full cursor-pointer">
+      <div className="flex flex-col items-start p-4 border border rounded-lg bg-white shadow-sm hover:shadow-lg transition-shadow duration-300 w-full cursor-pointer border border-gray-300">
         <div className="flex items-center w-full mb-2">
           <img
             src={company.company_logo}

@@ -9,22 +9,21 @@ const Footer: React.FC = () => {
       <div className="w-full pt-16 pb-8">
         <div className="max-w-screen-lg mx-auto flex flex-col items-center text-center space-y-4 px-4">
           <h2 className="text-2xl font-bold text-primary">Stay in the loop</h2>
-          <div className="max-w-[650px] mx-auto">
+          <div className="max-w-[800px] mx-auto">
             <p className="text-gray-700">
               Follow us on Instagram as we build a community around Germany's top advertising news,
               share tips for landing your dream role, and offer a sneak peek into agency life.
             </p>
             <p className="text-gray-700 mt-2">
-              Feeling chatty? We're all ears for feedback and suggestions.
+              Feeling chatty? We're all ears for feedback and suggestions. Drop us a line{' '}
+              <a href="mailto:creativeagencycareers@gmail.com" className="text-black underline">here</a> or via DMs.
             </p>
             <p className="text-gray-700">
-              Drop us a line{' '}
-              <a href="mailto:creativeagencycareers@gmail.com" className="text-black underline">here</a> or via DMs.
             </p>
           </div>
         </div>
       </div>
-      <div className="w-full pt-8 pb-8 bg-gray-200">
+      <div className="w-full pt-8 pb-8">
         <div className="max-w-screen-lg mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 px-4">
           <div className="flex justify-center w-full md:w-auto md:justify-start">
             <Link href="/" passHref>
