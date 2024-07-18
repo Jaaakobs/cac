@@ -5,7 +5,7 @@ import cacLogo from '@/images/cac-logo.png';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="relative mt-8 w-full bg-gray-200" style={{ clipPath: 'ellipse(100% 100% at 50% 100%)' }}>
+    <footer className="relative mt-8 w-full">
       <div className="w-full pt-16 pb-8">
         <div className="max-w-screen-lg mx-auto flex flex-col items-center text-center space-y-4 px-4">
           <h2 className="text-2xl font-bold text-primary">Stay in the loop</h2>

@@ -1,5 +1,5 @@
 // app/fonts.ts
-import { Anton, Open_Sans } from 'next/font/google';
+import { Anton, Open_Sans } from '@next/font/google';
 
 export const anton = Anton({
   weight: '400',

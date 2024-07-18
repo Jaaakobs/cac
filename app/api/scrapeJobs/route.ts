@@ -1,50 +1,12 @@
 import { NextResponse } from 'next/server';
 import { ApifyClient } from 'apify-client';
 import supabase from '@/utils/supabase/client';
-import OpenAI from 'openai';
 
 if (!process.env.APIFY_API_TOKEN) {
   throw new Error('APIFY_API_TOKEN environment variable is not set.');
 }
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error('OPENAI_API_KEY environment variable is not set.');
-}
-
 const apifyClient = new ApifyClient({ token: process.env.APIFY_API_TOKEN });
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const generateOpenAIResponse = async (title:string, description: string, promptTemplate: string) => {
-  const response = await openai.chat.completions.create({
-    model: 'gpt-4o',
-    messages: [
-      { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: `${promptTemplate}\n${title}\n${description}` },
-    ],
-  });
-
-  const choice = response?.choices?.[0]?.message?.content?.trim();
-  if (!choice) {
-    throw new Error('Invalid OpenAI response');
-  }
-  return choice;
-};
-
-const extractLanguageScores = (languageScores: string) => {
-  let german_score = 'n/a';
-  let english_score = 'n/a';
-  for (const part of languageScores.split(',')) {
-    if (part.includes('German')) {
-      german_score = part.split('(')[1].replace(')', '').trim();
-    } else if (part.includes('English')) {
-      english_score = part.split('(')[1].replace(')', '').trim();
-    }
-  }
-  return { german_score, english_score };
-};
 
 const parseBigInt = (value: string | undefined) => {
   return value ? parseInt(value, 10) || null : null;
@@ -122,13 +84,6 @@ export async function POST() {
           continue;
         }
 
-        // Generate OpenAI responses for each job description
-        const languageScores = await generateOpenAIResponse(item.title ,item.descriptionText, languagePromptTemplate);
-        const { german_score, english_score } = extractLanguageScores(languageScores);
-
-        const jobCategory = await generateOpenAIResponse(item.title, item.descriptionText, categoryPromptTemplate);
-        const jobScore = await generateOpenAIResponse(item.title, item.descriptionText, scorePromptTemplate);
-
         const jobData = {
           id: item.id,
           title: item.title,
@@ -154,12 +109,8 @@ export async function POST() {
           company_employees_count: parseBigInt(item.companyEmployeesCount),
           applicants_count: parseBigInt(item.applicantsCount),
           company_linkedin_url: item.companyLinkedinUrl,
-          job_score: jobScore,
-          job_category: jobCategory,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          german_score: german_score,
-          english_score: english_score,
           status: 'active', // Mark as active
         };
 
@@ -199,31 +150,3 @@ export async function POST() {
     return NextResponse.json({ error: 'Error scraping jobs' }, { status: 500 });
   }
 }
-
-
-
-
-// Prompt templates
-const languagePromptTemplate = `Based on the job description for a position located in Germany, determine the required language proficiency levels. Select up to two languages, choosing from German and English, and specify their proficiency levels. The language proficiency levels available are: German (B2), German (C1), German (C2), English (B2), English (C1), and English (C2). Output the language proficiency levels in the format 'Language Proficiency (Level)', separated by a comma if selecting two. Focus solely on providing the language proficiency levels in your response, without including any additional information or context.
-
-For example:
-- If the job requires native German skills and professional English communication, your output could be: 'German (C2), English (B2)'.
-- If the role demands professional proficiency in both German and English, consider: 'German (B2), English (B2)'.
-
-Ensure your response strictly adheres to this format and includes no extraneous details beyond the specified language proficiency levels.
-Even if you are unsure about the level, add at least one output never give back something blank.
-
-Job Description:`;
-
-const categoryPromptTemplate = `Based on the job description, categorize the job into one or more of the following categories, but select a maximum of 3, ideally just 1: Biz Dev Jobs, Creative Jobs, Delivery Jobs, Design Jobs, Marketing Jobs, Operations Jobs, Strategy Jobs, Tech Jobs. Provide the job categories separated by commas. Don't provide anything else or that you cannot assign a job. If you don't have any assignment then leave this field blank. Never add anything else.
-
-Job Description:`;
-
-const scorePromptTemplate = `Evaluate the job description and assign a job score based on the following criteria:
-- Low: The job offer is rather generic and seems very unspecial.
-- Medium: The job offer is good and reasonably interesting.
-- High: The job offer is extremely interesting and rare.
-
-Provide only the job score without any additional information.
-
-Job Description:`;

@@ -28,7 +28,7 @@ const AboutUs = () => {
   return (
     <div className="bg-background">
       {/* Header Section */}
-      <section className="relative flex flex-col items-center justify-center pt-6 bg-gray-200 w-full" style={{ clipPath: 'ellipse(120% 100% at 50% 0%)' }}>
+      <section className="relative flex flex-col items-center justify-center pt-6">
         <MenuBar />
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center max-w-[1088px]">
           <div className="md:w-1/2 text-center md:text-left">
