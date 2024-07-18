@@ -33,7 +33,6 @@ export type Job = {
   link: string;
   german_score: string;
   english_score: string;
-  cac_description: string;
 };
 
 export const useJobs = () => {
@@ -79,8 +78,7 @@ export const useJobs = () => {
           applicants_count,
           link,
           german_score,
-          english_score,
-          cac_description
+          english_score
         `);
 
         if (error) {
