@@ -152,7 +152,7 @@ export default function Dashboard() {
         </div>
         <div className="p-4 mt-6 bg-gray-50 rounded-lg shadow-md">
           <h2 className="text-lg font-bold mb-4">Agency Industries</h2>
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width={800} height={400}>
             <PieChart>
               <Pie data={industryChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={150} label>
                 {industryChartData.map((entry, index) => (

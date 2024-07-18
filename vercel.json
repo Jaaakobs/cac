@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/fullUpdate",
-      "schedule": "0 */46 * * *"
+      "schedule": "0 */48 * * *"
     }
   ]
 }
