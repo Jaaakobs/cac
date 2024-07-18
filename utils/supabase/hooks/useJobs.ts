@@ -112,12 +112,6 @@ export const useJobs = () => {
         setJobCategories(uniqueJobCategories);
         setAgencyIndustries(uniqueAgencyIndustries);
 
-        localStorage.setItem('jobs', JSON.stringify(data));
-        localStorage.setItem('locations', JSON.stringify(uniqueLocations));
-        localStorage.setItem('jobCategories', JSON.stringify(uniqueJobCategories));
-        localStorage.setItem('agencyIndustries', JSON.stringify(uniqueAgencyIndustries));
-        localStorage.setItem('agencyNames', JSON.stringify(agencyNames));
-
       } catch (fetchError) {
         console.error("An unexpected error occurred:", fetchError);
       } finally {
@@ -126,22 +120,7 @@ export const useJobs = () => {
     };
 
     if (dataFetchedRef.current) {
-      const jobsData = localStorage.getItem('jobs');
-      const locationsData = localStorage.getItem('locations');
-      const jobCategoriesData = localStorage.getItem('jobCategories');
-      const agencyIndustriesData = localStorage.getItem('agencyIndustries');
-      const agencyNamesData = localStorage.getItem('agencyNames');
-
-      if (jobsData && locationsData && jobCategoriesData && agencyIndustriesData && agencyNamesData) {
-        setJobs(JSON.parse(jobsData));
-        setLocations(JSON.parse(locationsData));
-        setJobCategories(JSON.parse(jobCategoriesData));
-        setAgencyIndustries(JSON.parse(agencyIndustriesData));
-        setAgencyNames(JSON.parse(agencyNamesData));
-        setLoading(false);
-      } else {
-        fetchJobs();
-      }
+      fetchJobs();
     } else {
       dataFetchedRef.current = true;
       fetchJobs();

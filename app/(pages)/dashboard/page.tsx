@@ -126,16 +126,18 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="container mx-auto max-w-6xl p-4 bg-white rounded-lg shadow-lg">
+      <div className="container mx-auto max-w-7xl p-4 bg-white rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="flex flex-col items-center">
-            <h2 className="text-xl font-semibold mb-4">Update Jobs</h2>
-            <UpdateJobsButton />
-          </div>
-          <div className="flex flex-col items-center">
-            <h2 className="text-xl font-semibold mb-4">Scrape Jobs</h2>
-            <ScrapeJobsButton />
+        <div className="p-4 mb-6 bg-gray-50 rounded-lg shadow-md">
+          <div className="flex justify-between mb-4">
+            <div className="flex flex-col items-center">
+              <h2 className="text-xl font-semibold mb-2">Update Jobs</h2>
+              <UpdateJobsButton />
+            </div>
+            <div className="flex flex-col items-center">
+              <h2 className="text-xl font-semibold mb-2">Scrape Jobs</h2>
+              <ScrapeJobsButton />
+            </div>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -147,59 +149,59 @@ export default function Dashboard() {
             <h2 className="text-lg font-bold mb-4">Agencies</h2>
             <p className="text-2xl">{agencyCount}</p>
           </div>
-          <div className="p-4 bg-gray-50 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-4">Agency Industries</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie data={industryChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label>
-                  {industryChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-4">Job Posting Timeline</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={timelineChartArray}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="jobs" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-4">Seniority Levels</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={seniorityChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="level" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="jobs" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="p-4 bg-gray-50 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-4">Employment Types</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={employmentTypeChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="type" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="jobs" fill="#8884d8" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+        </div>
+        <div className="p-4 mt-6 bg-gray-50 rounded-lg shadow-md">
+          <h2 className="text-lg font-bold mb-4">Agency Industries</h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart>
+              <Pie data={industryChartData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={150} label>
+                {industryChartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="p-4 mt-6 bg-gray-50 rounded-lg shadow-md">
+          <h2 className="text-lg font-bold mb-4">Job Posting Timeline</h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={timelineChartArray}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="jobs" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="p-4 mt-6 bg-gray-50 rounded-lg shadow-md">
+          <h2 className="text-lg font-bold mb-4">Seniority Levels</h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={seniorityChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="level" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="jobs" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="p-4 mt-6 bg-gray-50 rounded-lg shadow-md">
+          <h2 className="text-lg font-bold mb-4">Employment Types</h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={employmentTypeChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="type" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="jobs" fill="#8884d8" />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
