@@ -63,6 +63,7 @@ export async function POST() {
     console.log('Starting job update process...');
 
     let offset = 0;
+    let jobsToUpdate = [];
 
     while (true) {
       const { data: jobs, error: jobsError } = await supabase
@@ -78,19 +79,36 @@ export async function POST() {
       }
 
       if (jobs.length === 0) {
-        break; // No more jobs to process
-      }
+        // Check if there are any jobs left with ai_update = false
+        const { data: remainingJobs, error: remainingJobsError } = await supabase
+          .from('jobs')
+          .select('id')
+          .eq('ai_update', false);
 
-      const jobsToUpdate = [];
+        if (remainingJobsError) {
+          console.error('Error fetching remaining jobs:', remainingJobsError);
+          return NextResponse.json({ error: 'Error fetching remaining jobs' }, { status: 500 });
+        }
+
+        if (remainingJobs.length === 0) {
+          break; // No more jobs to process
+        }
+
+        offset = 0; // Reset offset to re-check all jobs
+        continue; // Continue the loop to process remaining jobs
+      }
 
       for (const job of jobs) {
         const { jobCategory, jobScore } = await updateJobCategoryAndScore(job);
+
+        const isCategoryValid = jobCategory && jobCategory.match(/^(Biz Dev Jobs|Creative Jobs|Delivery Jobs|Design Jobs|Marketing Jobs|Operations Jobs|Strategy Jobs|Tech Jobs)(, (Biz Dev Jobs|Creative Jobs|Delivery Jobs|Design Jobs|Marketing Jobs|Operations Jobs|Strategy Jobs|Tech Jobs)){0,2}$/);
+        const isScoreValid = jobScore && (jobScore === 'Low' || jobScore === 'Medium' || jobScore === 'High');
 
         jobsToUpdate.push({
           id: job.id,
           job_category: jobCategory,
           job_score: jobScore,
-          ai_update: true,
+          ai_update: isCategoryValid && isScoreValid,
         });
       }
 
@@ -104,6 +122,7 @@ export async function POST() {
       }
 
       offset += BATCH_SIZE;
+      jobsToUpdate = []; // Reset jobsToUpdate for the next batch
     }
 
     return NextResponse.json({ message: 'Job updates completed successfully' });
