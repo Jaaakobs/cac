@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import UpdateJobsButton from '@/components/dashboard/UpdateJobsButton';
 import ScrapeJobsButton from '@/components/dashboard/ScrapeJobsButton';
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
@@ -8,6 +8,26 @@ import { useAgencies } from '@/utils/supabase/hooks/useAgencies';
 import { useJobs } from '@/utils/supabase/hooks/useJobs';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AA34DD', '#DD4B4B', '#4B8EDD'];
+
+type ChartData = {
+  name: string;
+  value: number;
+};
+
+type TimelineData = {
+  date: string;
+  jobs: number;
+};
+
+type SeniorityData = {
+  level: string;
+  jobs: number;
+};
+
+type EmploymentTypeData = {
+  type: string;
+  jobs: number;
+};
 
 export default function Dashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -48,7 +68,7 @@ export default function Dashboard() {
   const activeJobs = jobs.filter(job => job.status === 'active').length;
   const agencyCount = agencies.length;
 
-  const industryData = agencies.reduce((acc, agency) => {
+  const industryData: { [key: string]: number } = agencies.reduce((acc: { [key: string]: number }, agency) => {
     const industry = agency.industry || 'Unknown';
     if (!acc[industry]) {
       acc[industry] = 0;
@@ -57,12 +77,12 @@ export default function Dashboard() {
     return acc;
   }, {});
 
-  const industryChartData = Object.keys(industryData).map(industry => ({
+  const industryChartData: ChartData[] = Object.keys(industryData).map(industry => ({
     name: industry,
     value: industryData[industry],
   }));
 
-  const timelineChartData = jobs.reduce((acc, job) => {
+  const timelineChartData: { [key: string]: number } = jobs.reduce((acc: { [key: string]: number }, job) => {
     const date = new Date(job.posted_at).toLocaleDateString('en-GB', {
       month: 'short',
       year: 'numeric',
@@ -71,12 +91,12 @@ export default function Dashboard() {
     return acc;
   }, {});
 
-  const timelineChartArray = Object.keys(timelineChartData).map(date => ({
+  const timelineChartArray: TimelineData[] = Object.keys(timelineChartData).map(date => ({
     date,
     jobs: timelineChartData[date],
   }));
 
-  const seniorityData = jobs.reduce((acc, job) => {
+  const seniorityData: { [key: string]: number } = jobs.reduce((acc: { [key: string]: number }, job) => {
     const level = job.seniority_level || 'Unknown';
     if (!acc[level]) {
       acc[level] = 0;
@@ -85,12 +105,12 @@ export default function Dashboard() {
     return acc;
   }, {});
 
-  const seniorityChartData = Object.keys(seniorityData).map(level => ({
+  const seniorityChartData: SeniorityData[] = Object.keys(seniorityData).map(level => ({
     level,
     jobs: seniorityData[level],
   }));
 
-  const employmentTypeData = jobs.reduce((acc, job) => {
+  const employmentTypeData: { [key: string]: number } = jobs.reduce((acc: { [key: string]: number }, job) => {
     const type = job.employment_type || 'Unknown';
     if (!acc[type]) {
       acc[type] = 0;
@@ -99,7 +119,7 @@ export default function Dashboard() {
     return acc;
   }, {});
 
-  const employmentTypeChartData = Object.keys(employmentTypeData).map(type => ({
+  const employmentTypeChartData: EmploymentTypeData[] = Object.keys(employmentTypeData).map(type => ({
     type,
     jobs: employmentTypeData[type],
   }));
