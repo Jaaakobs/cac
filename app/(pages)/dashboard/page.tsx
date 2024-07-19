@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import UpdateJobsButton from '@/components/dashboard/UpdateJobsButton';
 import ScrapeJobsButton from '@/components/dashboard/ScrapeJobsButton';
+import JobUpdatesButton from '@/components/dashboard/JobUpdatesButton';
+
 import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useAgencies } from '@/utils/supabase/hooks/useAgencies';
 import { useJobs } from '@/utils/supabase/hooks/useJobs';
@@ -137,6 +139,10 @@ export default function Dashboard() {
             <div className="flex flex-col items-center">
               <h2 className="text-xl font-semibold mb-2">Scrape Jobs</h2>
               <ScrapeJobsButton />
+            </div>
+            <div className="flex flex-col items-center">
+              <h2 className="text-xl font-semibold mb-2">Send JobUpdate Emails</h2>
+              <JobUpdatesButton />
             </div>
           </div>
         </div>
