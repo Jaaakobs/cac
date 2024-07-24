@@ -31,7 +31,7 @@ const JobUpdatesButton = () => {
     <div className="flex flex-col items-center">
       <button
         onClick={sendJobUpdates}
-        className="bg-blue-500 text-white p-2 rounded"
+        className="bg-primary text-white p-2 rounded"
         disabled={loading}
       >
         {loading ? 'Sending...' : 'Send Job Updates'}

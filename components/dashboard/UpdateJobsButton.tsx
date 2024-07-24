@@ -1,9 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import supabase from '@/utils/supabase/client';
 
 const UpdateJobsButton: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [processInfo, setProcessInfo] = useState<string | null>(null);
   const [abortController, setAbortController] = useState<AbortController | null>(null);
+  const [missingJobCategoryCount, setMissingJobCategoryCount] = useState<number | null>(null);
+  const [missingJobScoreCount, setMissingJobScoreCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchMissingJobs = async () => {
+      const { data: jobCategoryData, error: jobCategoryError } = await supabase
+        .from('jobs')
+        .select('*', { count: 'exact' })
+        .is('job_category', null);
+
+      const { data: jobScoreData, error: jobScoreError } = await supabase
+        .from('jobs')
+        .select('*', { count: 'exact' })
+        .is('job_score', null);
+
+      if (jobCategoryError) {
+        console.error('Error fetching jobs missing job_category:', jobCategoryError);
+      } else {
+        setMissingJobCategoryCount(jobCategoryData.length);
+      }
+
+      if (jobScoreError) {
+        console.error('Error fetching jobs missing job_score:', jobScoreError);
+      } else {
+        setMissingJobScoreCount(jobScoreData.length);
+      }
+    };
+
+    fetchMissingJobs();
+  }, []);
 
   const handleUpdateJobs = async () => {
     const controller = new AbortController();
@@ -40,9 +71,15 @@ const UpdateJobsButton: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center">
+      {missingJobCategoryCount !== null && missingJobScoreCount !== null && (
+        <div className="mb-4 text-center">
+          <p className="text-gray-700">Jobs missing category: {missingJobCategoryCount}</p>
+          <p className="text-gray-700">Jobs missing score: {missingJobScoreCount}</p>
+        </div>
+      )}
       <button 
         onClick={handleUpdateJobs} 
-        className={`bg-blue-500 text-white p-2 rounded ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+        className={`bg-primary text-white p-2 rounded ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
         disabled={isLoading}
       >
         Update Jobs
